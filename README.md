@@ -1,3 +1,23 @@
+#color Pallete
+
+
+Light Mode
+- Primary = #02d96e
+- secondary = #cce5ff
+- Accent = #02fd80
+- Background = #fafafa
+- text = #050505
+
+Dark Mode
+- text = #fafafa
+- background = #050505
+- secondary = #001933
+- primary = #02d96e
+- accent = #67feb3
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

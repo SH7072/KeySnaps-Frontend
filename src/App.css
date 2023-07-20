@@ -1,38 +1,61 @@
-.App {
-  text-align: center;
+#game_words {
+  display: inline;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+#game_words:focus-visible {
+  outline: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.doneWords {
+  display: inline;
+  color: black;
+  font-family: monospace;
+  font-size: 1.5rem;
+}
+
+.bg-green-200 {
+  display: inline;
+  color: green;
+  font-family: monospace;
+  font-size: 1.5rem;
+}
+
+.bg-red-200 {
+  display: inline;
+  color: red;
+  font-family: monospace;
+  font-size: 1.5rem;
+}
+
+.cursor {
+  display: inline;
+  font-size: 1.5rem;
+}
+
+.cursor {
+  animation: cursor-blink 1s infinite;
+}
+
+
+@keyframes cursor-blink {
+  0% {
+    opacity: 0;
   }
-}
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  50% {
+    opacity: 1;
   }
-  to {
-    transform: rotate(360deg);
+
+  100% {
+    opacity: 0;
   }
+
+}
+
+
+.pendingWords {
+  display: inline;
+  color: dimgray;
+  font-family: monospace;
+  font-size: 1.5rem;
 }
