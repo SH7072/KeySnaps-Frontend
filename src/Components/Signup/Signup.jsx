@@ -3,8 +3,6 @@ import { IconAt, IconBrandFacebook, IconBrandGoogle, IconBrandTwitter } from '@t
 import React, { useState } from 'react';
 import PasswordInputCustom from './PasswordInputCustom';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { register } from '../../../../Code-Editor-Frontend/src/redux/actions/user';
 
 
 const useStyles = createStyles((theme) => ({
@@ -44,7 +42,6 @@ const requirements = [
 
 const Signup = () => {
     const { classes } = useStyles();
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [firstName, setFirstName] = useState('');
@@ -60,6 +57,8 @@ const Signup = () => {
     const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
     const [checkedError, setCheckedError] = useState('');
+
+    const [formError, setFormError] = useState('');
 
 
     const handleValidation = () => {
@@ -128,23 +127,41 @@ const Signup = () => {
         return isFormValid;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (handleValidation()) {
-            console.log(firstName, lastName, email, password, confirmPassword, checked);
             const name = firstName + ' ' + lastName;
-            dispatch(register(name, email, password, navigate));
-        }
+            try {
+                const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/signup`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ name, email, password })
+                });
 
+                const data = await res.json();
+
+                if (res.status === 200) {
+                    console.log(data, "data");
+                    navigate('/login');
+                }
+                else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.log(error, "error");
+                setFormError(error.message);
+            }
+        }
     };
 
     return (
         <>
             <Paper sx={classes.body}>
-                <Title order={1} align={'center'} sx={classes.logo}>CodeRoom</Title>
+                <Title order={1} align={'center'} sx={classes.logo}>Signup</Title>
                 <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'}>
-                    <img src="./login.png" alt="login" width="90%" height="90%" />
+                    {/* <img src="./login.png" alt="login" width="90%" height="90%" /> */}
                 </Flex>
                 <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'} >
                     < Paper p={10} miw={'60%'} maw={'60%'} w={'60%'}>
@@ -161,6 +178,7 @@ const Signup = () => {
                                 <IconBrandTwitter />
                             </ActionIcon>
                         </Flex>
+                        {formError.length > 0 && <Text c="red" align={'center'}>{formError}</Text>}
                         <Flex py={15} px={20} direction='column' gap={20}>
                             <Flex justify={'space-between'}>
                                 <Input.Wrapper

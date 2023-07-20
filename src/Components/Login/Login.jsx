@@ -1,9 +1,7 @@
 import { ActionIcon, Button, Flex, Input, Paper, PasswordInput, Text, Title, createStyles } from '@mantine/core';
 import { IconAt, IconBrandFacebook, IconBrandGoogle, IconBrandTwitter } from '@tabler/icons-react';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../../redux/actions/user';
 
 const useStyles = createStyles((theme) => ({
     body: {
@@ -32,23 +30,15 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-// const requirements = [
-//     { re: /[0-9]/, label: 'Includes number' },
-//     { re: /[a-z]/, label: 'Includes lowercase letter' },
-//     { re: /[A-Z]/, label: 'Includes uppercase letter' },
-//     { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: 'Includes special symbol' },
-// ];
-
-
 const Login = () => {
     const { classes } = useStyles();
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
+    const [formError, setFormError] = useState('');
 
     const handleValidation = (e) => {
         let isFormValid = true;
@@ -80,8 +70,29 @@ const Login = () => {
         e.preventDefault();
 
         if (handleValidation()) {
-            // console.log(email, password);
-            dispatch(login(email, password, navigate));
+            try {
+
+                const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/login`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                const status = res.status;
+                const data = await res.json();
+
+                if (status === 200) {
+                    localStorage.setItem('token', data.token);
+                    navigate('/home');
+                }
+                else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.log(error, "error");
+                setFormError(error.message);
+            }
         }
     };
 
@@ -89,9 +100,9 @@ const Login = () => {
     return (
         <>
             <Paper sx={classes.body}>
-                <Title order={1} align={'center'} sx={classes.logo}>CodeRoom</Title>
+                <Title order={1} align={'center'} sx={classes.logo}>Login</Title>
                 <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'}>
-                    <img src="./login.png" alt="login" width="90%" height="90%" />
+                    {/* <img src="./login.png" alt="login" width="90%" height="90%" /> */}
                 </Flex>
                 <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'} >
                     <Paper w={'60%'} p={10}>
@@ -107,6 +118,11 @@ const Login = () => {
                                 <IconBrandTwitter />
                             </ActionIcon>
                         </Flex>
+                        {formError && (
+                            <Text color="red" align="center" mt={10}>
+                                {formError}
+                            </Text>
+                        )}
                         <Flex py={15} px={20} direction='column' gap={20}>
                             <Input.Wrapper label="Email" required error={emailError} >
                                 <Input
