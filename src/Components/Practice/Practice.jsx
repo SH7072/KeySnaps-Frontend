@@ -11,11 +11,19 @@ import StatsIcon from "../TypeWriter/StatsIcon";
 import Timing from "../TypeWriter/Timing";
 import Difficulty from "../TypeWriter/Diffculty";
 
+
+const modes = {
+    easy: 'getEasyMode',
+    medium: 'getMediumMode',
+    hard: 'getHardMode'
+}
+
+
 const Practice = ({ }) => {
     const [startTime, setStartTime] = useState(10);
     const [difficulty, setDiffculty] = useState('easy');
     const [doneWords, setDoneWords] = useState([]);
-    const [pendingWords, setPendingWords] = useState("there is no specific topic provided, so it is difficult to generate a paragraph without any context. Please provide a topic or let me know if there's anything else I can assist you with. People of all ages and cultures respond to humour. Most people are able to experience humour—be amused, smile or laugh at something funny(such as a pun or joke)—and thus are considered to have a sense of humour. The hypothetical person lacking a sense of humour would likely find the behaviour to be inexplicable, strange, or even irrational.");
+    const [pendingWords, setPendingWords] = useState("");
     const [status, setStatus] = useState('wait');
     const [stats, setStats] = useState({ inputChars: 0, goodChars: 0 });
     const [time, setTime] = useState(startTime);
@@ -23,21 +31,65 @@ const Practice = ({ }) => {
     const [netWPM, setNetWPM] = useState(0);
     const [accuracy, setAccuracy] = useState(0);
 
+    const fetchParagraph = async () => {
+        const mode = modes[difficulty];
+        console.log(mode);
+        const url = `${process.env.REACT_APP_BACKEND_URL}/paragraph/${mode}/`;
+        const res = await fetch(url);
+        const data = await res.json();
+        console.log(data['data']);
+        setPendingWords(data['data']);
+    }
 
-    console.log(startTime, difficulty);
+    useEffect(() => {
+        fetchParagraph();
+    }, [difficulty]);
+
+
+    // console.log(startTime, difficulty);
     // console.log(time, status, stats, grossWPM, netWPM, accuracy);
+
+    const handleTypingEnd = () => {
+        setStatus('stop');
+
+        const recentStats = sessionStorage.getItem('recentStats');
+        if (recentStats !== null) {
+            const recentStatsObj = JSON.parse(recentStats);
+            sessionStorage.setItem('recentStats', JSON.stringify([
+                {
+                    grossWPM: grossWPM,
+                    netWPM: netWPM,
+                    accuracy: accuracy,
+                    time: startTime,
+                    difficulty: difficulty
+                },
+                ...recentStatsObj
+            ]));
+        }
+        else {
+            sessionStorage.setItem('recentStats', JSON.stringify([
+                {
+                    grossWPM: grossWPM,
+                    netWPM: netWPM,
+                    accuracy: accuracy,
+                    time: startTime,
+                    difficulty: difficulty
+                }
+            ]));
+        }
+    }
 
     useEffect(() => {
         const timerId = time > 0 && status === 'start' && setInterval(() => {
             setTime(time - 1);
-        }, 1000);
-        const timerId2 = time === 0 && status === 'start' && setStatus('stop');
-
-        return () => {
-            clearInterval(timerId);
             setAccuracy(calcAccuracy());
             setGrossWPM(calulateGrossWPM());
             setNetWPM(calulateNetWPM());
+        }, 1000);
+        const timerId2 = time === 0 && status === 'start' && handleTypingEnd();
+
+        return () => {
+            clearInterval(timerId);
         }
 
     }, [time, status]);
@@ -90,7 +142,8 @@ const Practice = ({ }) => {
 
     const handleReset = () => {
         setDoneWords([])
-        setPendingWords("there is no specific topic provided, so it is difficult to generate a paragraph without any context. Please provide a topic or let me know if there's anything else I can assist you with. People of all ages and cultures respond to humour. Most people are able to experience humour—be amused, smile or laugh at something funny(such as a pun or joke)—and thus are considered to have a sense of humour. The hypothetical person lacking a sense of humour would likely find the behaviour to be inexplicable, strange, or even irrational.")
+        // setPendingWords("")
+        setDiffculty(difficulty)
         setStatus('wait')
         setStats({ inputChars: 0, goodChars: 0 })
         setTime(startTime)
@@ -170,7 +223,7 @@ const Practice = ({ }) => {
 
                 <Flex w="80vw" h={"50vh"} direction={'column'}>
                     {status === "start" && <Progress count={time} />}
-                    {(status === "wait" || status === "start") && <TypeWriter
+                    {(pendingWords?.length > 0) && (status === "wait" || status === "start") && <TypeWriter
                         doneWords={doneWords}
                         pendingWords={pendingWords}
                         handleKeyDown={handleKeyDown}

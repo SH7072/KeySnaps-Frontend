@@ -16,6 +16,7 @@ import LeaderBoard from "./Components/LeaderBoard/LeaderBoard";
 import Lobby from "./Components/Multiplayer/Lobby";
 import CreateLobby from "./Components/Multiplayer/CreateLobby/CreateLobby";
 import JoinLobby from "./Components/Multiplayer/JoinLobby/JoinLobby";
+import UserInfo from "./Components/UserInfo/UserInfo";
 
 function Root() {
   return (
@@ -31,13 +32,11 @@ function App() {
     createRoutesFromElements(
       <Route path="/" element={<Root />}>
         <Route path="signup" element={<Signup />} />
-        <Route path="login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/practice" element={<Practice />} />
-        <Route path="/leaderboard" element={<LeaderBoard />} />
-        <Route path="/lobby" element={<Lobby />} />
-        <Route path="/createlobby" element={<CreateLobby />} />
-        <Route path="/joinlobby" element={<JoinLobby />} />
+        <Route path="register" element={<Login />} />
+        <Route path="home" element={<Home />} />
+        <Route path="userInfo" element={<UserInfo />} />
+        <Route path="practice" element={<Practice />} />
+        <Route path="leaderboard" element={<LeaderBoard />} />
         <Route path="*" element={<h1>Not Found</h1>} />
       </Route>
     ));
