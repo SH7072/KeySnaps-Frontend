@@ -5,7 +5,7 @@ import {
   createRoutesFromElements,
   Outlet,
 } from "react-router-dom";
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import Signup from "./Components/Signup/Signup";
 import Login from "./Components/Login/Login";
@@ -13,12 +13,25 @@ import { MantineProvider } from "@mantine/core";
 import Practice from "./Components/Practice/Practice";
 import Home from "./Components/Home/Home";
 import LeaderBoard from "./Components/LeaderBoard/LeaderBoard";
-import Lobby from "./Components/Multiplayer/Lobby";
 import CreateLobby from "./Components/Multiplayer/CreateLobby/CreateLobby";
 import JoinLobby from "./Components/Multiplayer/JoinLobby/JoinLobby";
 import UserInfo from "./Components/UserInfo/UserInfo";
+import Lobby from "./Components/Lobby/Lobby";
 
 function Root() {
+
+  useEffect(() => {
+
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+    if (isLoggedIn === null || isLoggedIn === false) {
+      sessionStorage.setItem('isLoggedIn', false);
+    }
+
+
+  }, []);
+
+
+
   return (
     <>
       <Outlet />
@@ -37,9 +50,10 @@ function App() {
         <Route path="userInfo" element={<UserInfo />} />
         <Route path="practice" element={<Practice />} />
         <Route path="leaderboard" element={<LeaderBoard />} />
-        <Route path="lobby" element={<Lobby />} />
+        {/* <Route path="lobby" element={<Lobby />} /> */}
         <Route path="createlobby" element={<CreateLobby />} />
         <Route path="joinlobby" element={<JoinLobby />} />
+        <Route path='lobby/:lobbyCode' element={<Lobby />} />
         <Route path="*" element={<h1>Not Found</h1>} />
       </Route>
     ));
