@@ -159,7 +159,7 @@ const Signup = () => {
     return (
         <>
             <Paper sx={classes.body}>
-                <Title order={1} align={'center'} sx={classes.logo}>Signup</Title>
+                <Title order={1} align={'center'} sx={classes.logo}>Register</Title>
                 <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'}>
                     {/* <img src="./login.png" alt="login" width="90%" height="90%" /> */}
                 </Flex>

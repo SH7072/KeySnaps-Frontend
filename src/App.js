@@ -29,11 +29,11 @@ function App() {
     createRoutesFromElements(
       <Route path="/" element={<Root />}>
         <Route path="signup" element={<Signup />} />
-        <Route path="login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/userInfo" element={<UserInfo />} />
-        <Route path="/practice" element={<Practice />} />
-        <Route path="/leaderboard" element={<LeaderBoard />} />
+        <Route path="register" element={<Login />} />
+        <Route path="home" element={<Home />} />
+        <Route path="userInfo" element={<UserInfo />} />
+        <Route path="practice" element={<Practice />} />
+        <Route path="leaderboard" element={<LeaderBoard />} />
         <Route path="*" element={<h1>Not Found</h1>} />
       </Route>
     ));

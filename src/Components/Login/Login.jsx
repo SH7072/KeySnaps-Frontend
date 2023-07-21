@@ -83,7 +83,8 @@ const Login = () => {
                 const data = await res.json();
 
                 if (status === 200) {
-                    localStorage.setItem('token', data.token);
+                    sessionStorage.setItem('token', data.token);
+                    sessionStorage.setItem('username', data.username);
                     navigate('/home');
                 }
                 else {
@@ -142,7 +143,7 @@ const Login = () => {
                                 error={passwordError}
                             />
                             <Flex justify={'space-between'} mt={10}>
-                                <Link to="/signup" className={classes.link}>
+                                <Link to="/register" className={classes.link}>
                                     <Text align={'center'}>Don't have an account? Register</Text>
                                 </Link>
                                 <Button color="blue" onClick={handleSubmit}>
