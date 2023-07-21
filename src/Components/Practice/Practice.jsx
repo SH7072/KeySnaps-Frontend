@@ -10,6 +10,8 @@ import Progress from "../TypeWriter/Progress";
 import StatsIcon from "../TypeWriter/StatsIcon";
 import Timing from "../TypeWriter/Timing";
 import Difficulty from "../TypeWriter/Diffculty";
+import { useParams } from "react-router-dom";
+
 
 
 const modes = {
@@ -39,6 +41,30 @@ const Practice = ({ }) => {
         const data = await res.json();
         console.log(data['data']);
         setPendingWords(data['data']);
+    }
+    const sendStats =async()=>{
+        const url = `${process.env.REACT_APP_BACKEND_URL}/score/newScore`;
+        // const {id}=useParams();
+        // useParams
+        // use params user id
+
+
+
+        const res = await fetch(url,{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                
+                'netWPM':netWPM,
+                'accuracy':accuracy,
+                'time':startTime,
+                
+            })
+        });
+        const data = await res.json();
+        console.log(data);
     }
 
     useEffect(() => {
