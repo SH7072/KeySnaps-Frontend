@@ -1,18 +1,11 @@
-import { Box, Center, Flex, SegmentedControl, Tooltip } from "@mantine/core";
-import TypeWriter from "../TypeWriter/TypeWriter";
-import NavBar from "../NavBar/NavBar";
-import { IconClockHour3, IconHash, IconKeyboard } from "@tabler/icons-react";
-import Options from "../Options";
 import { useEffect, useState } from "react";
-import Timer from "../TypeWriter/Progress";
-import CountUp from 'react-countup';
-import Progress from "../TypeWriter/Progress";
-import StatsIcon from "../TypeWriter/StatsIcon";
-import Timing from "../TypeWriter/Timing";
+import { useParams } from "react-router";
+import { socket } from "../../socket";
+import { Button, Flex, Progress, Tooltip } from "@mantine/core";
+import TypeWriter from "../TypeWriter/TypeWriter";
 import Difficulty from "../TypeWriter/Diffculty";
-import { useParams } from "react-router-dom";
-
-
+import Timing from "../TypeWriter/Timing";
+import { IconKeyboard } from "@tabler/icons-react";
 
 const modes = {
     easy: 'getEasyMode',
@@ -21,7 +14,13 @@ const modes = {
 }
 
 
-const Practice = ({ }) => {
+const Lobby = () => {
+
+    const { lobbyCode } = useParams();
+    const multiPlayerUsername = sessionStorage.getItem('multiPlayerUsername');
+    const [announcements, setAnnouncements] = useState([]);
+
+    const [lobbyInfo, setLobbyInfo] = useState({});
     const [startTime, setStartTime] = useState(10);
     const [difficulty, setDiffculty] = useState('easy');
     const [doneWords, setDoneWords] = useState([]);
@@ -34,6 +33,13 @@ const Practice = ({ }) => {
     const [accuracy, setAccuracy] = useState(0);
 
 
+    const getLobbyInfo = async () => {
+        const url = `${process.env.REACT_APP_BACKEND_URL}/lobby/getLobby/${lobbyCode}/`;
+        const res = await fetch(url);
+        const data = await res.json();
+        console.log(data);
+        setLobbyInfo(data.data);
+    }
     const fetchParagraph = async () => {
         const mode = modes[difficulty];
         console.log(mode);
@@ -43,83 +49,6 @@ const Practice = ({ }) => {
         console.log(data['data']);
         setPendingWords(data['data']);
     }
-    const sendStats =async()=>{
-        const url = `${process.env.REACT_APP_BACKEND_URL}/score/newScore`;
-        // const {id}=useParams();
-        // useParams
-        // use params user id
-
-
-
-        const res = await fetch(url,{
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-                
-                'netWPM':netWPM,
-                'accuracy':accuracy,
-                'time':startTime,
-                
-            })
-        });
-        const data = await res.json();
-        console.log(data);
-    }
-
-    useEffect(() => {
-        fetchParagraph();
-    }, [difficulty]);
-
-
-    // console.log(startTime, difficulty);
-    // console.log(time, status, stats, grossWPM, netWPM, accuracy);
-
-    const handleTypingEnd = () => {
-        setStatus('stop');
-
-        const recentStats = sessionStorage.getItem('recentStats');
-        if (recentStats !== null) {
-            const recentStatsObj = JSON.parse(recentStats);
-            sessionStorage.setItem('recentStats', JSON.stringify([
-                {
-                    grossWPM: grossWPM,
-                    netWPM: netWPM,
-                    accuracy: accuracy,
-                    time: startTime,
-                    difficulty: difficulty
-                },
-                ...recentStatsObj
-            ]));
-        }
-        else {
-            sessionStorage.setItem('recentStats', JSON.stringify([
-                {
-                    grossWPM: grossWPM,
-                    netWPM: netWPM,
-                    accuracy: accuracy,
-                    time: startTime,
-                    difficulty: difficulty
-                }
-            ]));
-        }
-    }
-
-    useEffect(() => {
-        const timerId = time > 0 && status === 'start' && setInterval(() => {
-            setTime(time - 1);
-            setAccuracy(calcAccuracy());
-            setGrossWPM(calulateGrossWPM());
-            setNetWPM(calulateNetWPM());
-        }, 1000);
-        const timerId2 = time === 0 && status === 'start' && handleTypingEnd();
-
-        return () => {
-            clearInterval(timerId);
-        }
-
-    }, [time, status]);
 
     const handleKeyDown = (e) => {
 
@@ -166,7 +95,6 @@ const Practice = ({ }) => {
             setStats(newStats);
         }
     }
-
     const handleReset = () => {
         setDoneWords([])
         // setPendingWords("")
@@ -179,6 +107,58 @@ const Practice = ({ }) => {
         setAccuracy(0)
     }
 
+
+    useEffect(() => {
+        socket.on('announcement', (msg) => {
+            console.log(msg);
+            setAnnouncements([...announcements, msg]);
+        });
+
+        socket.on('start-game', () => {
+            setStatus('start');
+        }
+        );
+
+    }, [socket]);
+
+    console.log(announcements);
+
+    useEffect(() => {
+        getLobbyInfo();
+        socket.connect();
+        // console.log(lobbyCode, multiPlayerUsername);
+        socket.emit('player-joined', { lobbyCode, username: multiPlayerUsername });
+
+
+
+
+    }, []);
+
+    useEffect(() => {
+        const timerId = time > 0 && status === 'start' && setInterval(() => {
+            setTime(time - 1);
+            setAccuracy(calcAccuracy());
+            setGrossWPM(calulateGrossWPM());
+            setNetWPM(calulateNetWPM());
+        }, 1000);
+        const timerId2 = time === 0 && status === 'start' && handleTypingEnd();
+
+        return () => {
+            clearInterval(timerId);
+        }
+
+    }, [time, status]);
+
+    const handleGameStart = async () => {
+        await fetchParagraph();
+        setStatus('start');
+        socket.emit('start-game', { lobbyCode, username: multiPlayerUsername });
+    }
+
+    const handleTypingEnd = () => {
+        setStatus('stop');
+        socket.emit('end-game', { lobbyCode, username: multiPlayerUsername, stats: { grossWPM, netWPM, accuracy, time, difficulty } });
+    }
 
     const calulateGrossWPM = () => {
         return (60 * (stats.inputChars) / (5 * startTime)).toFixed(2);
@@ -205,48 +185,22 @@ const Practice = ({ }) => {
     }
 
 
+
+
     return (
         <>
-            <NavBar />
-            <Flex align={"center"} h={'70vh'} direction={'column'} pt={'100px'}>
-                {status === "stop" &&
-                    (
-                        <>
-                            <Flex justify={'space-between'} w={'80%'}>
-                                <CountUp start={0} end={grossWPM} delay={2}>
-                                    {({ countUpRef }) => (
-                                        <StatsIcon
-                                            label={"Gross WPM"}
-                                            progress={grossWPM}
-                                            icon={grossWPM > 50 ? "up" : "down"}
-                                            countUpRef={countUpRef}
-                                        />
-                                    )}
-                                </CountUp>
-                                <CountUp start={0} end={netWPM} delay={2}>
-                                    {({ countUpRef }) => (
-                                        <StatsIcon
-                                            label={"Net WPM"}
-                                            progress={netWPM}
-                                            icon={netWPM > 50 ? "up" : "down"}
-                                            countUpRef={countUpRef}
-                                        />
-                                    )}
-                                </CountUp>
-                                <CountUp start={0} end={accuracy} delay={2}>
-                                    {({ countUpRef }) => (
-                                        <StatsIcon
-                                            label={"Accuracy"}
-                                            progress={accuracy}
-                                            icon={accuracy > 85 ? "up" : "down"}
-                                            countUpRef={countUpRef}
-                                        />
-                                    )}
-                                </CountUp>
-                            </Flex>
-                        </>
+            <div>Lobby</div>
+            <div>{lobbyCode}</div>
+            <div>{multiPlayerUsername}</div>
+            <div>
+                {announcements.map((announcement, index) => {
+                    return (
+                        <div key={index}>{announcement}</div>
                     )
-                }
+                })}
+            </div>
+            {multiPlayerUsername === lobbyInfo.ownerName && <Button onClick={handleGameStart}>Start Game</Button>}
+            <Flex align={"center"} h={'70vh'} direction={'column'} pt={'100px'}>
 
                 <Flex w="80vw" h={"50vh"} direction={'column'}>
                     {status === "start" && <Progress count={time} />}
@@ -257,7 +211,7 @@ const Practice = ({ }) => {
                         handleReset={handleReset}
                     />}
                 </Flex>
-                <Flex justify={'center'} w="80vw" align={'center'} >
+                {/* <Flex justify={'center'} w="80vw" align={'center'} >
                     {status == 'wait' && <Difficulty difficulty={difficulty} setDiffculty={setDiffculty} />}
 
                     <Tooltip label="reset">
@@ -266,10 +220,11 @@ const Practice = ({ }) => {
 
                     {status === 'wait' && <Timing startTime={startTime} setStartTime={setStartTime} setTime={setTime} />}
 
-                </Flex>
+                </Flex> */}
             </Flex>
+
         </>
-    );
+    )
 }
 
-export default Practice;
+export default Lobby;
