@@ -13,7 +13,6 @@ const Timing = ({ startTime, setStartTime, setTime }) => {
                         value={toString(startTime)}
                         onChange={
                             (val) => {
-                                console.log(Number(val));
                                 setStartTime(Number(val));
                                 setTime(Number(val));
                             }

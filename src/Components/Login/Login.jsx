@@ -82,6 +82,8 @@ const Login = () => {
                 const status = res.status;
                 const data = await res.json();
 
+                console.log(data);
+
                 if (status === 200) {
                     sessionStorage.setItem('token', data.token);
                     sessionStorage.setItem('username', data.username);

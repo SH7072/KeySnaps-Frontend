@@ -1,11 +1,14 @@
-import { TextInput, Checkbox, Button, Group, Box } from '@mantine/core';
+import { TextInput, Checkbox, Button, Group, Box, Flex, Tooltip } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 
 const JoinLobby = () => {
-    const [username, setUsername] = useState('');
+
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+
+    const [username, setUsername] = useState(isLoggedIn === 'true' ? sessionStorage.getItem('username') : '');
     const [lobbyCode, setLobbyCode] = useState(null);
 
     const naviagte = useNavigate();
@@ -18,15 +21,15 @@ const JoinLobby = () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username: username, lobbyCode: lobbyCode })
+                body: JSON.stringify({ username: username, lobbyCode: lobbyCode, isLoggedIn: isLoggedIn })
             });
             const status = res.status;
             const data = await res.json();
 
             if (status === 200) {
-                console.log(data.data);
+                console.log(data.lobby);
                 sessionStorage.setItem('multiPlayerUsername', username);
-                naviagte(`/lobby/${data.data.lobbyCode}`);
+                naviagte(`/lobby/${data.lobby.lobbyCode}`);
             }
             else {
                 throw new Error(data.message);
@@ -38,15 +41,21 @@ const JoinLobby = () => {
     }
 
     return (
-        <Box maw={300} mx="auto">
-            <TextInput
-                withAsterisk
-                label="Username"
-                placeholder="username"
-                required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
+
+        <Flex maw={300} mx="auto" direction={'column'} justify={'center'}>
+            <Tooltip label="Username can't be changed" disabled={!(isLoggedIn === 'true')}>
+                <Box mb="md" >
+                    <TextInput
+                        withAsterisk
+                        label="Username"
+                        placeholder="username"
+                        disabled={isLoggedIn === 'true'}
+                        required
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                </Box>
+            </Tooltip >
             <TextInput
                 withAsterisk
                 label="Lobby Code"
@@ -58,9 +67,9 @@ const JoinLobby = () => {
 
 
             <Group position="right" mt="md">
-                <Button onClick={handleSubmit}>Submit</Button>
+                <Button onClick={handleSubmit}>Join Lobby</Button>
             </Group>
-        </Box>
+        </Flex >
     );
 }
 

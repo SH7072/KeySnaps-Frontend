@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { socket } from "../../socket";
-import { Button, Flex, Progress, Tooltip } from "@mantine/core";
+import { Button, Flex, Tooltip } from "@mantine/core";
 import TypeWriter from "../TypeWriter/TypeWriter";
 import Difficulty from "../TypeWriter/Diffculty";
 import Timing from "../TypeWriter/Timing";
 import { IconKeyboard } from "@tabler/icons-react";
+import Progress from "../TypeWriter/Progress";
+import Timer from "./Timer";
+import CountUp from 'react-countup';
+import StatsIcon from "../TypeWriter/StatsIcon";
 
 const modes = {
     easy: 'getEasyMode',
@@ -18,6 +22,7 @@ const Lobby = () => {
 
     const { lobbyCode } = useParams();
     const multiPlayerUsername = sessionStorage.getItem('multiPlayerUsername');
+    const multiPlayerUserid = sessionStorage.getItem('multiPlayerUserid');
     const [announcements, setAnnouncements] = useState([]);
 
     const [lobbyInfo, setLobbyInfo] = useState({});
@@ -31,23 +36,23 @@ const Lobby = () => {
     const [grossWPM, setGrossWPM] = useState(0);
     const [netWPM, setNetWPM] = useState(0);
     const [accuracy, setAccuracy] = useState(0);
-
+    const [waitTime, setWaitTime] = useState(5);
 
     const getLobbyInfo = async () => {
         const url = `${process.env.REACT_APP_BACKEND_URL}/lobby/getLobby/${lobbyCode}/`;
         const res = await fetch(url);
         const data = await res.json();
-        console.log(data);
+        // console.log(data);
         setLobbyInfo(data.data);
     }
     const fetchParagraph = async () => {
         const mode = modes[difficulty];
-        console.log(mode);
         const url = `${process.env.REACT_APP_BACKEND_URL}/paragraph/${mode}/`;
         const res = await fetch(url);
         const data = await res.json();
-        console.log(data['data']);
+        // console.log(data['data']);
         setPendingWords(data['data']);
+        return data['data'];
     }
 
     const handleKeyDown = (e) => {
@@ -59,7 +64,7 @@ const Lobby = () => {
                     (e.keyCode >= 97 && e.keyCode <= 122) ||
                     e.keyCode === 32 || e.keyCode === 188 || e.keyCode === 190 || e.keyCode === 219 || e.keyCode === 221 || e.keyCode === 222) {
 
-                    if (status === 'wait') setStatus('start');
+                    // if (status === 'wait') setStatus('start');
                     let newStats = { ...stats };
 
                     console.log(e.key, pendingWords[0]);
@@ -97,39 +102,42 @@ const Lobby = () => {
     }
     const handleReset = () => {
         setDoneWords([])
-        // setPendingWords("")
+        setPendingWords("")
         setDiffculty(difficulty)
         setStatus('wait')
         setStats({ inputChars: 0, goodChars: 0 })
         setTime(startTime)
+        setWaitTime(5)
         setGrossWPM(0)
         setNetWPM(0)
         setAccuracy(0)
     }
 
+    console.log(announcements);
 
     useEffect(() => {
         socket.on('announcement', (msg) => {
             console.log(msg);
+            console.log(announcements);
             setAnnouncements([...announcements, msg]);
         });
 
-        socket.on('start-game', () => {
-            setStatus('start');
-        }
-        );
+        socket.on('game-ready', (data) => {
+            setStartTime(data.startTime);
+            setWaitTime(data.waitTime);
+            setTime(data.startTime);
+            setPendingWords(data.paragraph);
+            setDiffculty(data.difficulty);
+            setStatus('ready');
+        });
 
     }, [socket]);
-
-    console.log(announcements);
 
     useEffect(() => {
         getLobbyInfo();
         socket.connect();
         // console.log(lobbyCode, multiPlayerUsername);
-        socket.emit('player-joined', { lobbyCode, username: multiPlayerUsername });
-
-
+        socket.emit('player-joined', { lobbyCode, userid: multiPlayerUserid, username: multiPlayerUsername });
 
 
     }, []);
@@ -143,21 +151,35 @@ const Lobby = () => {
         }, 1000);
         const timerId2 = time === 0 && status === 'start' && handleTypingEnd();
 
+        const timerId3 = waitTime > 0 && status === 'ready' && setInterval(() => {
+            setWaitTime(waitTime - 1);
+        }, 1000);
+
+        const timerId4 = waitTime === 0 && status === 'ready' && setStatus('start');
+
         return () => {
             clearInterval(timerId);
+            clearInterval(timerId3);
         }
 
-    }, [time, status]);
+    }, [time, status, waitTime]);
 
     const handleGameStart = async () => {
-        await fetchParagraph();
-        setStatus('start');
-        socket.emit('start-game', { lobbyCode, username: multiPlayerUsername });
+        const paragraph = await fetchParagraph();
+        socket.emit('start-game', {
+            lobbyCode,
+            waitTime: waitTime,
+            startTime: startTime,
+            difficulty: difficulty,
+            paragraph: paragraph
+        });
+        setStatus('ready');
     }
 
     const handleTypingEnd = () => {
         setStatus('stop');
-        socket.emit('end-game', { lobbyCode, username: multiPlayerUsername, stats: { grossWPM, netWPM, accuracy, time, difficulty } });
+        handleReset();
+        socket.emit('end-game', { lobbyCode, userid: multiPlayerUserid, username: multiPlayerUsername, stats: { grossWPM, netWPM, accuracy, time, difficulty } });
     }
 
     const calulateGrossWPM = () => {
@@ -201,28 +223,68 @@ const Lobby = () => {
             </div>
             {multiPlayerUsername === lobbyInfo.ownerName && <Button onClick={handleGameStart}>Start Game</Button>}
             <Flex align={"center"} h={'70vh'} direction={'column'} pt={'100px'}>
-
+                {status === "stop" &&
+                    (
+                        <>
+                            <Flex justify={'space-between'} w={'80%'}>
+                                <CountUp start={0} end={grossWPM} delay={0}>
+                                    {({ countUpRef }) => (
+                                        <StatsIcon
+                                            label={"Gross WPM"}
+                                            progress={grossWPM}
+                                            icon={grossWPM > 50 ? "up" : "down"}
+                                            countUpRef={countUpRef}
+                                        />
+                                    )}
+                                </CountUp>
+                                <CountUp start={0} end={netWPM} delay={0}>
+                                    {({ countUpRef }) => (
+                                        <StatsIcon
+                                            label={"Net WPM"}
+                                            progress={netWPM}
+                                            icon={netWPM > 50 ? "up" : "down"}
+                                            countUpRef={countUpRef}
+                                        />
+                                    )}
+                                </CountUp>
+                                <CountUp start={0} end={accuracy} delay={0}>
+                                    {({ countUpRef }) => (
+                                        <StatsIcon
+                                            label={"Accuracy"}
+                                            progress={accuracy}
+                                            icon={accuracy > 85 ? "up" : "down"}
+                                            countUpRef={countUpRef}
+                                        />
+                                    )}
+                                </CountUp>
+                            </Flex>
+                        </>
+                    )
+                }
                 <Flex w="80vw" h={"50vh"} direction={'column'}>
-                    {status === "start" && <Progress count={time} />}
-                    {(pendingWords?.length > 0) && (status === "wait" || status === "start") && <TypeWriter
+                    {status === "start" && <Timer count={time} maxCount={startTime} />}
+                    {status === "ready" && <Timer count={waitTime} maxCount={5} />}
+                    {(pendingWords?.length > 0) && (status === "start") && <TypeWriter
                         doneWords={doneWords}
                         pendingWords={pendingWords}
                         handleKeyDown={handleKeyDown}
                         handleReset={handleReset}
                     />}
                 </Flex>
-                {/* <Flex justify={'center'} w="80vw" align={'center'} >
-                    {status == 'wait' && <Difficulty difficulty={difficulty} setDiffculty={setDiffculty} />}
+                {
+                    multiPlayerUsername === lobbyInfo.ownerName &&
+                    <Flex justify={'center'} w="80vw" align={'center'} >
+                        {status == 'wait' && <Difficulty difficulty={difficulty} setDiffculty={setDiffculty} />}
 
-                    <Tooltip label="reset">
-                        <IconKeyboard size={"100px"} onClick={handleReset} />
-                    </Tooltip>
+                        <Tooltip label="reset">
+                            <IconKeyboard size={"100px"} onClick={handleReset} />
+                        </Tooltip>
 
-                    {status === 'wait' && <Timing startTime={startTime} setStartTime={setStartTime} setTime={setTime} />}
+                        {status === 'wait' && <Timing startTime={startTime} setStartTime={setStartTime} setTime={setTime} />}
 
-                </Flex> */}
+                    </Flex>
+                }
             </Flex>
-
         </>
     )
 }

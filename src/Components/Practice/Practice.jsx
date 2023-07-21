@@ -34,11 +34,9 @@ const Practice = ({ }) => {
 
     const fetchParagraph = async () => {
         const mode = modes[difficulty];
-        console.log(mode);
         const url = `${process.env.REACT_APP_BACKEND_URL}/paragraph/${mode}/`;
         const res = await fetch(url);
         const data = await res.json();
-        console.log(data['data']);
         setPendingWords(data['data']);
     }
 
@@ -48,7 +46,7 @@ const Practice = ({ }) => {
 
 
     // console.log(startTime, difficulty);
-    // console.log(time, status, stats, grossWPM, netWPM, accuracy);
+    console.log(time, status, stats, grossWPM, netWPM, accuracy);
 
     const handleTypingEnd = () => {
         setStatus('stop');
@@ -155,6 +153,7 @@ const Practice = ({ }) => {
 
 
     const calulateGrossWPM = () => {
+        console.log(stats.inputChars, startTime);
         return (60 * (stats.inputChars) / (5 * startTime)).toFixed(2);
     }
 
@@ -187,7 +186,7 @@ const Practice = ({ }) => {
                     (
                         <>
                             <Flex justify={'space-between'} w={'80%'}>
-                                <CountUp start={0} end={grossWPM} delay={2}>
+                                <CountUp start={0} end={grossWPM} delay={0}>
                                     {({ countUpRef }) => (
                                         <StatsIcon
                                             label={"Gross WPM"}
@@ -197,7 +196,7 @@ const Practice = ({ }) => {
                                         />
                                     )}
                                 </CountUp>
-                                <CountUp start={0} end={netWPM} delay={2}>
+                                <CountUp start={0} end={netWPM} delay={0}>
                                     {({ countUpRef }) => (
                                         <StatsIcon
                                             label={"Net WPM"}
@@ -207,7 +206,7 @@ const Practice = ({ }) => {
                                         />
                                     )}
                                 </CountUp>
-                                <CountUp start={0} end={accuracy} delay={2}>
+                                <CountUp start={0} end={accuracy} delay={0}>
                                     {({ countUpRef }) => (
                                         <StatsIcon
                                             label={"Accuracy"}
