@@ -13,6 +13,9 @@ import { MantineProvider } from "@mantine/core";
 import Practice from "./Components/Practice/Practice";
 import Home from "./Components/Home/Home";
 import LeaderBoard from "./Components/LeaderBoard/LeaderBoard";
+import Lobby from "./Components/Multiplayer/Lobby";
+import CreateLobby from "./Components/Multiplayer/CreateLobby/CreateLobby";
+import JoinLobby from "./Components/Multiplayer/JoinLobby/JoinLobby";
 
 function Root() {
   return (
@@ -32,6 +35,9 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/practice" element={<Practice />} />
         <Route path="/leaderboard" element={<LeaderBoard />} />
+        <Route path="/lobby" element={<Lobby />} />
+        <Route path="/createlobby" element={<CreateLobby />} />
+        <Route path="/joinlobby" element={<JoinLobby />} />
         <Route path="*" element={<h1>Not Found</h1>} />
       </Route>
     ));
