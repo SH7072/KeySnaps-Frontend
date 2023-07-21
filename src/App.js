@@ -13,6 +13,7 @@ import { MantineProvider } from "@mantine/core";
 import Practice from "./Components/Practice/Practice";
 import Home from "./Components/Home/Home";
 import LeaderBoard from "./Components/LeaderBoard/LeaderBoard";
+import UserInfo from "./Components/UserInfo/UserInfo";
 
 function Root() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="signup" element={<Signup />} />
         <Route path="login" element={<Login />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/userInfo" element={<UserInfo />} />
         <Route path="/practice" element={<Practice />} />
         <Route path="/leaderboard" element={<LeaderBoard />} />
         <Route path="*" element={<h1>Not Found</h1>} />

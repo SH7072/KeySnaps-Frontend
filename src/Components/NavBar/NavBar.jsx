@@ -31,13 +31,16 @@ import {
     IconChevronDown,
     IconUser,
 } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
+
+    const navigate = useNavigate();
+
     return (
         <>
             <Flex justify={'space-between'} p={'10px'}>
-                <Title order={3} style={{ color: 'black' }}>KeySnaps</Title>
+                <Title order={3} style={{ color: 'black' }} onClick={() => navigate('/home')}>KeySnaps</Title>
                 <Group m={0} pr={'10px'}>
                     <Menu>
                         <Menu.Target>

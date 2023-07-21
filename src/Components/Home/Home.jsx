@@ -44,37 +44,37 @@ const Home = () => {
         <>
             <Flex >
                 <Flex direction={'column'} w={'50%'} ml={'25vw'} pt={"200px"}>
-                    <Flex size={'2rem'}>
-                        <Text sx={classes.text} onClick={() => naviagte('/practice')}>
-                            Solo Typing
+                    <Flex size={'2rem'} onClick={() => naviagte('/userInfo')}>
+                        <Text sx={classes.text} >
+                            Practice
                         </Text>
                         <IconKeyboard size={'2rem'} />
                     </Flex>
-                    <Flex>
+                    <Flex size={'2rem'} onClick={() => naviagte('/multiplayer')}>
                         <Text sx={classes.text}>
-                            MultiPlayer typing
+                            MultiPlayer Typing Race
                         </Text>
                         <IconDeviceGamepad2 />
                     </Flex>
-                    <Flex>
+                    <Flex size={'2rem'} onClick={() => naviagte('/leaderboard')}>
                         <Text sx={classes.text}>
                             LeaderBoard
                         </Text>
                         <IconListNumbers />
                     </Flex>
-                    <Flex>
+                    <Flex size={'2rem'} onClick={() => naviagte('/stats')}>
                         <Text sx={classes.text}>
                             Stats
                         </Text>
                         <IconTargetArrow />
                     </Flex>
-                    <Flex>
+                    <Flex size={'2rem'} onClick={() => naviagte('/login')}>
                         <Text sx={classes.text}>
                             Login
                         </Text>
                         <IconLogin />
                     </Flex>
-                    <Flex>
+                    <Flex size={'2rem'} onClick={() => naviagte('/register')}>
                         <Text sx={classes.text}>
                             Register
                         </Text>
