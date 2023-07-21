@@ -81,10 +81,11 @@ const Login = () => {
                 });
                 const status = res.status;
                 const data = await res.json();
-
+                
                 if (status === 200) {
                     sessionStorage.setItem('token', data.token);
                     sessionStorage.setItem('username', data.username);
+                    sessionStorage.setItem('userId',data.userId);
                     sessionStorage.setItem('isLoggedIn', true);
                     navigate('/home');
                 }

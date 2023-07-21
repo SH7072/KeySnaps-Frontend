@@ -17,6 +17,7 @@ import CreateLobby from "./Components/Multiplayer/CreateLobby/CreateLobby";
 import JoinLobby from "./Components/Multiplayer/JoinLobby/JoinLobby";
 import UserInfo from "./Components/UserInfo/UserInfo";
 import Lobby from "./Components/Lobby/Lobby";
+import Profile from "./Components/Profile/Profile";
 
 function Root() {
 
@@ -54,6 +55,7 @@ function App() {
         <Route path="createlobby" element={<CreateLobby />} />
         <Route path="joinlobby" element={<JoinLobby />} />
         <Route path='lobby/:lobbyCode' element={<Lobby />} />
+        <Route path='profile' element={<Profile />} />
         <Route path="*" element={<h1>Not Found</h1>} />
       </Route>
     ));

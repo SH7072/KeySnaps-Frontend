@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import { Box,   } from "@mantine/core";
-const LeaderBoard = () => {
+const History = () => {
   //should be memoized or stable
   const [data, setData] = useState([]);
 
@@ -59,4 +59,4 @@ const LeaderBoard = () => {
     </>);
 };
 
-export default LeaderBoard;
+export default History;
