@@ -50,7 +50,7 @@ const Home = () => {
                         </Text>
                         <IconKeyboard size={'2rem'} />
                     </Flex>
-                    <Flex size={'2rem'} onClick={() => naviagte('/multiplayer')}>
+                    <Flex size={'2rem'} onClick={() => naviagte('/lobby')}>
                         <Text sx={classes.text}>
                             MultiPlayer Typing Race
                         </Text>
