@@ -39,7 +39,6 @@ function Root() {
 
   return (
     <>
-
       <Outlet />
     </>
   );
@@ -48,7 +47,7 @@ function Root() {
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      
+
       <Route path="/" element={<Root />}>
         <Route path="register" element={<Signup />} />
         <Route path="login" element={<Login />} />
