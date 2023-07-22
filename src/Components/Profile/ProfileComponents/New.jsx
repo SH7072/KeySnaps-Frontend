@@ -1,5 +1,6 @@
 import { createStyles, Flex, Avatar } from "@mantine/core";
 
+
 import React from 'react'
 
 
@@ -48,7 +49,7 @@ const useStyles = createStyles((theme) => ({
     announced_section_2: {
         width: '100%',
         marginTop: "1rem",
-        marginLeft:"1rem",
+        marginLeft: "1rem",
     },
     profile_averageScore: {
         width: "59%",
@@ -60,35 +61,52 @@ const useStyles = createStyles((theme) => ({
     },
 
 }));
-const User = ({ data }) => {
-    // const data = data;
-    console.log(data);
-    let totSec = data.totalTime;
-    let dateObj = new Date(totSec * 1000);
-    let hours = dateObj.getUTCHours();
-    let minutes = dateObj.getUTCMinutes();
-    let seconds = dateObj.getSeconds();
 
-    const timeString = hours.toString().padStart(2, '0')
-        + ':' + minutes.toString().padStart(2, '0')
-        + ':' + seconds.toString().padStart(2, '0');
+const New = ({username,stats}) => {
     const { classes, theme } = useStyles();
-    const totalTest = data.scores.length;
-    let speed = data.speed;
-    speed=Math.round((speed + Number.EPSILON) * 100) / 100
-    let Accuracy = data.accuracy;
-    Accuracy=Math.round((Accuracy + Number.EPSILON) * 100) / 100
+    console.log(username);
+    console.log(stats);
+    const test=stats.length;
+    
+    const subjectTotals = stats.reduce((acc, subject) => {
+        Object.keys(subject).forEach((subjectName) => {
+          acc[subjectName] = (acc[subjectName] || 0) + parseInt(subject[subjectName]);
+        });
+        return acc;
+      }, {});
+    
+      let totaltime=subjectTotals.time;
+      let overallAccuracy=subjectTotals.accuracy/test;
+      let averageSpeed=subjectTotals.netWPM/test;
+      console.log(averageSpeed);
+      console.log(overallAccuracy);
+      let dateObj = new Date(totaltime * 1000);
+      let hours = dateObj.getUTCHours();
+      let minutes = dateObj.getUTCMinutes();
+      let seconds = dateObj.getSeconds();
+  
+      const timeString = hours.toString().padStart(2, '0')
+          + ':' + minutes.toString().padStart(2, '0')
+          + ':' + seconds.toString().padStart(2, '0');
+      
+
+        averageSpeed=Math.round((averageSpeed + Number.EPSILON) * 100) / 100
+        overallAccuracy=Math.round((overallAccuracy + Number.EPSILON) * 100) / 100
+        // console.log(timeString);
+        // console.log(overallAccuracy);
+        //  console.log(averageSpeed);
+    
+
     return (
         <>
-
             <Flex className={classes.announced_card_container}>
                 <Flex className={classes.announced_section_1}>
                     <Flex className={classes.profile_picture}><Avatar size={"2.5rem"}></Avatar></Flex>
                     <Flex className={classes.profile_name}>
-                        <p>{data.username}</p>
+                        <p>{username} </p>
                     </Flex>
                     <Flex className={classes.profile_test}>
-                        <p>Test : {totalTest}</p>
+                        <p>Test : {test}</p>
                     </Flex>
                     <Flex className={classes.profile_time}>
                         <p>Total Time: {timeString} </p>
@@ -96,16 +114,15 @@ const User = ({ data }) => {
                 </Flex>
                 <Flex className={classes.announced_section_2}>
                     <Flex className={classes.profile_averageScore}>
-                        <p>Average Speed: {speed} wpm</p>
+                        <p>Average Speed: {averageSpeed} wpm</p>
                     </Flex>
                     <Flex className={classes.profile_overallScore}>
-                        <p>Overall Accuracy: {Accuracy} %</p>
+                        <p>Overall Accuracy: {overallAccuracy} %</p>
                     </Flex>
                 </Flex>
             </Flex>
-
         </>
     )
 }
 
-export default User
+export default New
