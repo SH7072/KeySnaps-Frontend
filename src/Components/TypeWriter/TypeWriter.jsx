@@ -1,5 +1,6 @@
 import { Button, Container, Flex, Text } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
+import NavBar from "../NavBar/NavBar";
 
 const TypeWriter = ({ doneWords, pendingWords, handleKeyDown, handleReset, short = false }) => {
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { createStyles, Flex, Box, Text, Anchor, Button } from "@mantine/core";
+import NavBar from '../NavBar/NavBar';
 
 
 
@@ -64,6 +65,7 @@ const Multiplayer = () => {
 
     return (
         <>
+              <NavBar />
             <div className={classes.main_container}>
                 <Flex className={classes.container1}>
                     <Flex className={classes.text_c}>

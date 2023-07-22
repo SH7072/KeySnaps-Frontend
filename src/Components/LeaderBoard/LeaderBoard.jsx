@@ -1,7 +1,22 @@
 import { useMemo, useState, useEffect } from 'react';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
-import { Box,   } from "@mantine/core";
+import { Box, createStyles } from "@mantine/core";
+import NavBar from '../NavBar/NavBar';
+
+
+const useStyles = createStyles((theme) => ({
+  main_container: {
+      display: "flex",
+      flexDirection: "column",
+      alignSelf: "center",
+      backgroundColor: 'white',
+      width: '90vw',
+      margin: "0 auto",
+      padding: '2rem 1rem 1rem 1rem',
+  },
+}));
 const LeaderBoard = () => {
+  const { classes, theme } = useStyles();
   //should be memoized or stable
   const [data, setData] = useState([]);
 
@@ -41,7 +56,7 @@ const LeaderBoard = () => {
         accessorKey: 'accuracy',
         header: 'Accuracy',
       },
-      
+
     ],
     [],
   );
@@ -53,9 +68,13 @@ const LeaderBoard = () => {
 
   return (
     <>
-      <Box align={'center'} justify={'center'} h={'100vh'} mih={'100vh'} direction={'column'}>
-        {data.length > 0 && <MantineReactTable table={table} />}
-      </Box>
+      <NavBar />
+      <div className={classes.main_container}>
+
+        <Box align={'center'} justify={'center'} h={'100vh'} mih={'100vh'} direction={'column'}>
+          {data.length > 0 && <MantineReactTable table={table} />}
+        </Box>
+      </div>
     </>);
 };
 

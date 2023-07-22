@@ -2,6 +2,7 @@ import { Button, Flex, Input, Text, Title, createStyles } from "@mantine/core";
 import { IconUserExclamation } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import NavBar from "../NavBar/NavBar";
 
 const useStyles = createStyles((theme) => ({
     text: {
@@ -47,6 +48,7 @@ const UserInfo = () => {
 
     return (
         <>
+              <NavBar />
             <Flex align={'center'} justify={'center'} h={'100vh'} mih={'100vh'} direction={'column'}>
                 <Title sx={classes.heading}>hey {username === '' ? "{user}" : username}!!!</Title>
                 <Text sx={classes.text} >

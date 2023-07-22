@@ -39,7 +39,7 @@ function Root() {
 
   return (
     <>
-      <NavBar />
+
       <Outlet />
     </>
   );

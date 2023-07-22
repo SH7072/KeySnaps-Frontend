@@ -3,15 +3,17 @@ import { IconAt, IconBrandFacebook, IconBrandGoogle, IconBrandTwitter } from '@t
 import React, { useState } from 'react';
 import PasswordInputCustom from './PasswordInputCustom';
 import { Link, useNavigate } from 'react-router-dom';
-
+// background-color="#edf3ef"
 
 const useStyles = createStyles((theme) => ({
     body: {
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: '#e8bb17',
+        backgroundColor: '#fff',
         height: '100vh',
         width: '100vw',
+        justifyContent:"center",
+        alignContent:"center",
     },
     link: {
         textDecoration: 'none',
@@ -28,6 +30,14 @@ const useStyles = createStyles((theme) => ({
         position: 'absolute',
         top: '1rem',
         left: '1rem',
+        
+            fontFamily: 'roboto mono',
+            fontSize: '3rem',
+            
+            color: 'black',
+            textShadow: '0 0 5px black',
+            paddingRight: '1rem'
+        
     }
 }));
 
@@ -158,13 +168,11 @@ const Signup = () => {
 
     return (
         <>
-            <Paper sx={classes.body}>
+            <Paper sx={classes.body} >
                 <Title order={1} align={'center'} sx={classes.logo}>Register</Title>
-                <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'}>
-                    {/* <img src="./login.png" alt="login" width="90%" height="90%" /> */}
-                </Flex>
-                <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'} >
-                    < Paper p={10} miw={'60%'} maw={'60%'} w={'60%'}>
+                
+                <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'}  >
+                    < Paper p={10} miw={'60%'} maw={'60%'} w={'60%'} shadow="xl" justifyContent="center">
                         <Title order={1} align={'center'}>Create an account</Title>
                         <Text c="dimmed" align={'center'}>Enter your details below.</Text>
                         <Flex justify={'center'} align={'center'}>

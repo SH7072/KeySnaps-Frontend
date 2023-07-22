@@ -7,9 +7,11 @@ const useStyles = createStyles((theme) => ({
     body: {
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: '#e8bb17',
+        backgroundColor: '#fff',
         height: '100vh',
         width: '100vw',
+        justifyContent:"center",
+        alignContent:"center",
     },
     link: {
         textDecoration: 'none',
@@ -19,13 +21,17 @@ const useStyles = createStyles((theme) => ({
     },
     logo: {
         color: '#fff',
-        fontSize: '2rem',
         fontWeight: 700,
         letterSpacing: '0.1rem',
         textShadow: '0 0 1rem rgba(0,0,0,0.5)',
         position: 'absolute',
         top: '1rem',
         left: '1rem',
+        fontFamily: 'roboto mono',
+        fontSize: '2.5rem',
+        color: 'black',
+        textShadow: '0 0 5px black',
+        paddingRight: '1rem'
     }
 }));
 
@@ -106,11 +112,9 @@ const Login = () => {
         <>
             <Paper sx={classes.body}>
                 <Title order={1} align={'center'} sx={classes.logo}>Login</Title>
-                <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'}>
-                    {/* <img src="./login.png" alt="login" width="90%" height="90%" /> */}
-                </Flex>
+                
                 <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'} >
-                    <Paper w={'60%'} p={10}>
+                    <Paper w={'60%'} p={10} shadow="xl" justifyContent="center">
                         <Title order={1} align={'center'}>Log In</Title>
                         <Flex justify={'center'} align={'center'} mt={15}>
                             <ActionIcon variant="outline" color="blue" radius="xl" size="xl" style={{ margin: 'auto' }}>

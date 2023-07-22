@@ -4,6 +4,7 @@ import User from './ProfileComponents/User';
 import History from './ProfileComponents/History';
 import Stat from './ProfileComponents/Stat';
 import New from './ProfileComponents/New';
+import { H1 } from 'tabler-icons-react';
 
 
 const useStyles = createStyles((theme) => ({
@@ -22,7 +23,10 @@ const Profile = () => {
 
     const { classes, theme } = useStyles();
     const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-
+    if (isLoggedIn == null) {
+        sessionStorage.setItem('isLoggedIn', false);
+        isLoggedIn = false;
+    }
     const username = sessionStorage.getItem('username');
     const recentStats = sessionStorage.getItem('recentStats');
     const userId = sessionStorage.getItem('userId')
@@ -67,7 +71,7 @@ const Profile = () => {
         }
     }, [])
     // console.log(stats.length);
-    if (isLoggedIn==true) {
+    if (isLoggedIn == true) {
         return (
             <>
                 <div className={classes.main_container}>
@@ -83,12 +87,13 @@ const Profile = () => {
         return (
             <>
                 <div className={classes.main_container}>
-    
+                    {isLoggedIn === "false" && username === null && <h1>Please enter username in userInfo</h1>}
+
                     {stats.length > 0 && <New stats={stats} username={username} />}
                     {stats.length > 0 && <Stat stats={stats} />}
-    
+
                 </div>
-                
+
             </>
         )
     }
