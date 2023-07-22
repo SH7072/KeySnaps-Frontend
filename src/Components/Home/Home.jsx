@@ -34,7 +34,6 @@ const Home = () => {
 
     const { classes } = useStyles();
     const naviagte = useNavigate();
-    const [state, setState] = useState(false);
 
     // useEffect(() => {
     //     setInterval(() => {
@@ -45,7 +44,6 @@ const Home = () => {
     const handleLogout = () => {
         console.log('sjdius');
         sessionStorage.clear();
-        // naviagte('/home');
     }
 
     return (
@@ -77,7 +75,7 @@ const Home = () => {
                         <IconTargetArrow />
                     </Flex>
                     {
-                        isLoggedIn === 'false' || isLoggedIn === null ? (
+                        (isLoggedIn === 'false') ? (
                             <>
                                 <Flex size={'2rem'} onClick={() => naviagte('/login')}>
                                     <Text sx={classes.text}>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { socket } from "../../socket";
 import { Button, Flex, Paper, ScrollArea, Title, Tooltip, createStyles } from "@mantine/core";
 import TypeWriter from "../TypeWriter/TypeWriter";
@@ -12,6 +12,8 @@ import CountUp from 'react-countup';
 import StatsIcon from "../TypeWriter/StatsIcon";
 import DisplayStats from "./DisplayStats";
 import ProgressSlider from "./ProgressSlider";
+import DisplayResults from "./DisplayResults";
+import { ButtonCopy } from "./ButtonCopy";
 
 const modes = {
     easy: 'getEasyMode',
@@ -65,6 +67,7 @@ const useStyles = createStyles((theme) => ({
 const Lobby = () => {
 
     const { classes, theme } = useStyles();
+    const navigate = useNavigate();
 
     const { lobbyCode } = useParams();
     const multiPlayerUsername = sessionStorage.getItem('multiPlayerUsername');
@@ -73,7 +76,7 @@ const Lobby = () => {
     const [announcements, setAnnouncements] = useState([]);
 
     const [lobbyInfo, setLobbyInfo] = useState({});
-    const [startTime, setStartTime] = useState(10);
+    const [startTime, setStartTime] = useState(30);
     const [difficulty, setDiffculty] = useState('easy');
     const [doneWords, setDoneWords] = useState([]);
     const [pendingWords, setPendingWords] = useState("kjsndjkndjk skdnkd skjd kjs dkjs djk skjd sklndkjs dks kjd sdnksw kjbdj dh dhj jd ehj dkj fejf hej djhs fhjds vhbdfjhekudbdsmn cejhsf jhes fds fkhjesbfes bfkjweb fkjes fiues bfjkwe fdjhesdb fawj djhwa djawh dhjwa iuwv ewajhd w3hjrvuwide wajn duie fjdsn fns cmnsz vesdwdb swajd ksd wa");
@@ -177,6 +180,16 @@ const Lobby = () => {
             });
         });
 
+        // socket.on('player-joined-report', (data) => {
+        //     setUsers(prev => {
+        //         return prev.filter(user => user.userid !== data.userid);
+        //     });
+
+        //     setUsers(prev => {
+        //         return [...prev, { userid: data.userid, username: data.username }];
+        //     });
+        // });
+
         socket.on('player-progress-report', (data) => {
             // console.log(playersStats);
             // const oldList = playersStats.filter(player => player.userid !== data.userid);
@@ -197,7 +210,19 @@ const Lobby = () => {
             });
         });
 
+        socket.on('end-lobby', (data) => {
+            // handleEndGame();
+
+            console.log('end-lobby');
+
+            socket.disconnect();
+            sessionStorage.removeItem('multiPlayerUsername');
+            sessionStorage.removeItem('multiPlayerUserid');
+            navigate('/lobby');
+        });
+
         socket.on('game-ready', (data) => {
+            handleReset();
             setStartTime(data.startTime);
             setWaitTime(data.waitTime);
             setTime(data.startTime);
@@ -262,7 +287,6 @@ const Lobby = () => {
 
     const handleTypingEnd = () => {
         setStatus('stop');
-        handleReset();
         socket.emit('player-finish-info', { lobbyCode, userid: multiPlayerUserid, username: multiPlayerUsername, stats: { grossWPM, netWPM, accuracy, time, difficulty } });
         setFinalStats(prev => {
             return [...prev, { userid: multiPlayerUserid, username: multiPlayerUsername, stats: { grossWPM, netWPM, accuracy, time, difficulty } }]
@@ -310,13 +334,34 @@ const Lobby = () => {
         return (((stats.inputChars - uncorrectedErrors) / stats.inputChars) * 100).toFixed(0);
     }
 
+    const handleLobbyExpire = async () => {
+        const url = `${process.env.REACT_APP_BACKEND_URL}/lobby/expireLobby/${lobbyCode}/`;
+        const res = await fetch(url);
+        const data = await res.json();
+        console.log(data);
+    }
 
 
+    const handleEndGame = async () => {
+        // setStatus('wait');
+        await handleLobbyExpire();
+        socket.emit('end-game', { lobbyCode, userid: multiPlayerUserid, username: multiPlayerUsername });
+        socket.disconnect();
+        sessionStorage.removeItem('multiPlayerUsername');
+        sessionStorage.removeItem('multiPlayerUserid');
+        navigate('/lobby');
+    }
+
+    const handleLeaveLobby = () => {
+        socket.emit('player-left', { lobbyCode, userid: multiPlayerUserid, username: multiPlayerUsername });
+        socket.disconnect();
+        sessionStorage.removeItem('multiPlayerUsername');
+        sessionStorage.removeItem('multiPlayerUserid');
+        navigate('/lobby');
+    }
 
     return (
-
-
-        <Flex w={'90vw'} h={'90vh'} p={'20px'} sx={classes.border} direction={'column'} m={'auto'}>
+        <Flex w={'90vw'} h={'92vh'} p={'20px'} justify={'center'} align={'center'} sx={classes.border} direction={'column'} m={'auto'}>
             <Flex mih={'45%'} w={'98%'} sx={classes.border}>
                 <Flex miw={'75%'} sx={classes.progressFlex} gap={"20px"} direction={'column'} align={'center'}>
                     {
@@ -327,11 +372,13 @@ const Lobby = () => {
                         })
                     }
                     {
-                        status === 'wait' && finalStats.map((player, index) => {
-                            return (
-                                <ProgressSlider key={index} username={player.username} value={player.stats.netWPM} end={0} />
-                            )
-                        })
+                        <DisplayResults opened={status === 'stop'} handleClose={handleReset} finalStats={finalStats} />
+                    }
+                    {
+                        status === 'wait' && (
+                            <Flex justify={'center'} align={'center'} direction={'column'}>
+                            </Flex>
+                        )
                     }
 
 
@@ -348,10 +395,13 @@ const Lobby = () => {
                         </Flex>}
                     {multiPlayerUsername === lobbyInfo.ownerName && status == 'wait' && <Difficulty difficulty={difficulty} setDiffculty={setDiffculty} center={false} />}
                     {multiPlayerUsername === lobbyInfo.ownerName && status === 'wait' && <Timing startTime={startTime} setStartTime={setStartTime} setTime={setTime} center={false} />}
-                    <Flex justify={'center'}>
-                        {multiPlayerUsername === lobbyInfo.ownerName && <Button onClick={handleGameStart} w={'200px'}>Start Game</Button>}
+                    {status === 'wait' && <Flex justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
+                        <ButtonCopy lobbyCode={lobbyCode} />
+                        {multiPlayerUsername === lobbyInfo.ownerName && <Button onClick={handleGameStart} w={'250px'}>Start Game</Button>}
+                        {multiPlayerUsername === lobbyInfo.ownerName && <Button w={'250px'} color="red" onClick={handleEndGame}>End Game</Button>}
                         {multiPlayerUsername !== lobbyInfo.ownerName && <Button w={'250px'} disabled>Waiting for host to start game</Button>}
-                    </Flex>
+                        {multiPlayerUsername !== lobbyInfo.ownerName && <Button w={'250px'} onClick={handleLeaveLobby}>Leave Lobby</Button>}
+                    </Flex>}
                 </Flex>
             </Flex>
             <Flex mih={'45%'} w={'98%'} sx={classes.border} mt={'2px'}>
@@ -363,7 +413,7 @@ const Lobby = () => {
                         handleReset={handleReset}
                         short={true}
                     />}
-                    {status === "stop" && <DisplayStats grossWPM={grossWPM} netWPM={netWPM} accuracy={accuracy} />}
+                    {/* {status === "stop" && <DisplayStats grossWPM={grossWPM} netWPM={netWPM} accuracy={accuracy} />} */}
                 </Flex>
                 <Flex mah={'100%'} miw={'20%'} p={'10px'} gap={'2px'} direction={'column'} sx={classes.announcement}>
                     <Title order={1} align={'center'}>Announcements</Title>
