@@ -22,7 +22,7 @@
 
 * To install the dependencies run : ```npm i```
 
-* To run the app run : ```npm start``
+* To run the app run : ```npm start```
 
 * Then the website can be accessed using : ```http://localhost:3000/```.
 
