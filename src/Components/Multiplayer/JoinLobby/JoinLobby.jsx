@@ -29,6 +29,7 @@ const JoinLobby = () => {
             if (status === 200) {
                 console.log(data.lobby);
                 sessionStorage.setItem('multiPlayerUsername', username);
+                sessionStorage.setItem('multiPlayerUserid', data.userid);
                 naviagte(`/lobby/${data.lobby.lobbyCode}`);
             }
             else {

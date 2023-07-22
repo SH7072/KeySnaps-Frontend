@@ -1,9 +1,9 @@
 import { Flex, SegmentedControl, Tooltip } from "@mantine/core";
 
-const Difficulty = ({ difficulty, setDiffculty }) => {
+const Difficulty = ({ difficulty, setDiffculty, center = true }) => {
     return (
         <>
-            <Flex justify={'center'} w={'30vw'}>
+            <Flex justify={'center'} w={center ? '30vw' : '100%'} >
                 <Tooltip label="difficulty">
                     <SegmentedControl
                         defaultValue="easy"

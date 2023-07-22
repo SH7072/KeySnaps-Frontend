@@ -59,3 +59,8 @@
   font-family: monospace;
   font-size: 1.5rem;
 }
+
+.short {
+  width: 80%;
+  margin: auto;
+}

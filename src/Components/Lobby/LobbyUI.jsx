@@ -1,42 +1,89 @@
-import { Flex, createStyles } from "@mantine/core";
+import { Flex, Paper, createStyles } from "@mantine/core";
 
-const useStyles = createStyles((theme) => ({
-    label: {
-        fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-        fontWeight: 700,
-        lineHeight: 1,
-    },
-    border: {
-        border: '1px solid black'
-    }
 
-}));
 
 
 const LobbyUI = () => {
 
-    const { classes, theme } = useStyles();
 
     return (
         <>
-            <Flex w={'100vw'} h={'100vh'} sx={classes.border} direction={'column'}>
-                <Flex mih={'50%'} sx={classes.border}>
-                    <Flex miw={'75%'} sx={classes.border}>
-
+            <>
+                {/* <div>Lobby</div>
+                <div>{lobbyCode}</div>
+                <div>{multiPlayerUsername}</div>
+                <div>
+                    {announcements.map((announcement, index) => {
+                        return (
+                            <div key={index}>{announcement}</div>
+                        )
+                    })}
+                </div>
+                {multiPlayerUsername === lobbyInfo.ownerName && <Button onClick={handleGameStart}>Start Game</Button>}
+                <Flex align={"center"} h={'70vh'} direction={'column'} pt={'100px'}>
+                    {status === "stop" &&
+                        (
+                            <>
+                                <Flex justify={'space-between'} w={'80%'}>
+                                    <CountUp start={0} end={grossWPM} delay={0}>
+                                        {({ countUpRef }) => (
+                                            <StatsIcon
+                                                label={"Gross WPM"}
+                                                progress={grossWPM}
+                                                icon={grossWPM > 50 ? "up" : "down"}
+                                                countUpRef={countUpRef}
+                                            />
+                                        )}
+                                    </CountUp>
+                                    <CountUp start={0} end={netWPM} delay={0}>
+                                        {({ countUpRef }) => (
+                                            <StatsIcon
+                                                label={"Net WPM"}
+                                                progress={netWPM}
+                                                icon={netWPM > 50 ? "up" : "down"}
+                                                countUpRef={countUpRef}
+                                            />
+                                        )}
+                                    </CountUp>
+                                    <CountUp start={0} end={accuracy} delay={0}>
+                                        {({ countUpRef }) => (
+                                            <StatsIcon
+                                                label={"Accuracy"}
+                                                progress={accuracy}
+                                                icon={accuracy > 85 ? "up" : "down"}
+                                                countUpRef={countUpRef}
+                                            />
+                                        )}
+                                    </CountUp>
+                                </Flex>
+                            </>
+                        )
+                    }
+                    <Flex w="80vw" h={"50vh"} direction={'column'}>
+                        {status === "start" && <Timer count={time} maxCount={startTime} />}
+                        {status === "ready" && <Timer count={waitTime} maxCount={5} />}
+                        {(pendingWords?.length > 0) && (status === "start") && <TypeWriter
+                            doneWords={doneWords}
+                            pendingWords={pendingWords}
+                            handleKeyDown={handleKeyDown}
+                            handleReset={handleReset}
+                        />}
                     </Flex>
-                    <Flex miw={'25%'} sx={classes.border}>
+                    {
+                        multiPlayerUsername === lobbyInfo.ownerName &&
+                        <Flex justify={'center'} w="80vw" align={'center'} >
+                            {status == 'wait' && <Difficulty difficulty={difficulty} setDiffculty={setDiffculty} />}
 
-                    </Flex>
-                </Flex>
-                <Flex mih={'50%'} sx={classes.border}>
-                    <Flex miw={'75%'} sx={classes.border}>
+                            <Tooltip label="reset">
+                                <IconKeyboard size={"100px"} onClick={handleReset} />
+                            </Tooltip>
 
-                    </Flex>
-                    <Flex miw={'75%'} sx={classes.border}>
+                            {status === 'wait' && <Timing startTime={startTime} setStartTime={setStartTime} setTime={setTime} />}
 
-                    </Flex>
-                </Flex>
-            </Flex>
+                        </Flex>
+                    }
+                </Flex> */}
+            </>
         </>
     );
 }

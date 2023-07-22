@@ -30,6 +30,8 @@ const useStyles = createStyles((theme) => ({
 
 const Home = () => {
 
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+
     const { classes } = useStyles();
     const naviagte = useNavigate();
     const [state, setState] = useState(false);
@@ -39,6 +41,12 @@ const Home = () => {
     //         setState(true);
     //     }, 10000);
     // })
+
+    const handleLogout = () => {
+        console.log('sjdius');
+        sessionStorage.clear();
+        // naviagte('/home');
+    }
 
     return (
         <>
@@ -62,24 +70,40 @@ const Home = () => {
                         </Text>
                         <IconListNumbers />
                     </Flex>
-                    <Flex size={'2rem'} onClick={() => naviagte('/stats')}>
+                    <Flex size={'2rem'} onClick={() => naviagte('/profile')}>
                         <Text sx={classes.text}>
-                            Stats
+                            Profile
                         </Text>
                         <IconTargetArrow />
                     </Flex>
-                    <Flex size={'2rem'} onClick={() => naviagte('/login')}>
-                        <Text sx={classes.text}>
-                            Login
-                        </Text>
-                        <IconLogin />
-                    </Flex>
-                    <Flex size={'2rem'} onClick={() => naviagte('/register')}>
-                        <Text sx={classes.text}>
-                            Register
-                        </Text>
-                        <IconWritingSign />
-                    </Flex>
+                    {
+                        isLoggedIn === 'false' || isLoggedIn === null ? (
+                            <>
+                                <Flex size={'2rem'} onClick={() => naviagte('/login')}>
+                                    <Text sx={classes.text}>
+                                        Login
+                                    </Text>
+                                    <IconLogin />
+                                </Flex>
+                                <Flex size={'2rem'} onClick={() => naviagte('/register')}>
+                                    <Text sx={classes.text}>
+                                        Register
+                                    </Text>
+                                    <IconWritingSign />
+                                </Flex>
+                            </>
+                        ) :
+                            (
+                                <>
+                                    <Flex size={'2rem'} onClick={handleLogout}>
+                                        <Text sx={classes.text}>
+                                            Logout
+                                        </Text>
+                                        <IconLogin />
+                                    </Flex>
+                                </>
+                            )
+                    }
                 </Flex>
                 <Flex direction={'column'} w={'50%'} mr={'25vw'} pt={"200px"}>
                     <Text sx={classes.heading} >

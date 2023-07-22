@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { socket } from "../../socket";
-import { Button, Flex, Tooltip } from "@mantine/core";
+import { Button, Flex, Paper, ScrollArea, Title, Tooltip, createStyles } from "@mantine/core";
 import TypeWriter from "../TypeWriter/TypeWriter";
 import Difficulty from "../TypeWriter/Diffculty";
 import Timing from "../TypeWriter/Timing";
@@ -10,6 +10,8 @@ import Progress from "../TypeWriter/Progress";
 import Timer from "./Timer";
 import CountUp from 'react-countup';
 import StatsIcon from "../TypeWriter/StatsIcon";
+import DisplayStats from "./DisplayStats";
+import ProgressSlider from "./ProgressSlider";
 
 const modes = {
     easy: 'getEasyMode',
@@ -17,26 +19,75 @@ const modes = {
     hard: 'getHardMode'
 }
 
+const useStyles = createStyles((theme) => ({
+    label: {
+        fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+        fontWeight: 700,
+        lineHeight: 1,
+    },
+    border: {
+        // border: '1px solid black'
+    },
+    typeWriteringFlex: {
+        // margin: 'auto',
+        // border: '1px solid black',
+    },
+    announcement: {
+        //thick border from left side
+        // borderBottom: '2px solid #e9ecef',
+        border: '2px solid #e9ecef'
+    },
+    innerAnnouncement: {
+        maxHeight: '90%',
+        overflowY: 'scroll',
+
+        '&::-webkit-scrollbar': {
+            width: '0.5rem',
+        },
+
+    },
+    controls: {
+        border: '2px solid #e9ecef',
+        // borderBottom: '2px solid #e9ecef',
+    },
+    progressFlex: {
+        // padding: '10px',
+        maxHeight: '90%',
+        overflowY: 'scroll',
+
+        '&::-webkit-scrollbar': {
+            width: '0.5rem',
+        },
+    }
+
+}));
 
 const Lobby = () => {
+
+    const { classes, theme } = useStyles();
 
     const { lobbyCode } = useParams();
     const multiPlayerUsername = sessionStorage.getItem('multiPlayerUsername');
     const multiPlayerUserid = sessionStorage.getItem('multiPlayerUserid');
+    console.log(multiPlayerUsername, multiPlayerUserid);
     const [announcements, setAnnouncements] = useState([]);
 
     const [lobbyInfo, setLobbyInfo] = useState({});
     const [startTime, setStartTime] = useState(10);
     const [difficulty, setDiffculty] = useState('easy');
     const [doneWords, setDoneWords] = useState([]);
-    const [pendingWords, setPendingWords] = useState("");
+    const [pendingWords, setPendingWords] = useState("kjsndjkndjk skdnkd skjd kjs dkjs djk skjd sklndkjs dks kjd sdnksw kjbdj dh dhj jd ehj dkj fejf hej djhs fhjds vhbdfjhekudbdsmn cejhsf jhes fds fkhjesbfes bfkjweb fkjes fiues bfjkwe fdjhesdb fawj djhwa djawh dhjwa iuwv ewajhd w3hjrvuwide wajn duie fjdsn fns cmnsz vesdwdb swajd ksd wa");
     const [status, setStatus] = useState('wait');
-    const [stats, setStats] = useState({ inputChars: 0, goodChars: 0 });
+    const [stats, setStats] = useState({ inputChars: 0, goodChars: 0, totalChars: 0 });
     const [time, setTime] = useState(startTime);
     const [grossWPM, setGrossWPM] = useState(0);
     const [netWPM, setNetWPM] = useState(0);
     const [accuracy, setAccuracy] = useState(0);
     const [waitTime, setWaitTime] = useState(5);
+
+    // const [users, setUsers] = useState([]);
+    const [finalStats, setFinalStats] = useState([]);//{userid: {grossWPM, netWPM, accuracy, time, difficulty}
+    const [playersStats, setPlayersStats] = useState([]);//{userid: {grossWPM, netWPM, accuracy}
 
     const getLobbyInfo = async () => {
         const url = `${process.env.REACT_APP_BACKEND_URL}/lobby/getLobby/${lobbyCode}/`;
@@ -113,13 +164,37 @@ const Lobby = () => {
         setAccuracy(0)
     }
 
-    console.log(announcements);
+    // console.log(announcements);
+
+    console.log(playersStats);
+    console.log(finalStats);
 
     useEffect(() => {
         socket.on('announcement', (msg) => {
             console.log(msg);
-            console.log(announcements);
-            setAnnouncements([...announcements, msg]);
+            setAnnouncements(prev => {
+                return [msg, ...prev];
+            });
+        });
+
+        socket.on('player-progress-report', (data) => {
+            // console.log(playersStats);
+            // const oldList = playersStats.filter(player => player.userid !== data.userid);
+            setPlayersStats(prev => {
+                return prev.filter(player => player.userid !== data.userid);
+            });
+            setPlayersStats(prev => {
+                return [...prev, { userid: data.userid, username: data.username, stats: data.stats }]
+            });
+        });
+
+        socket.on('player-finish-report', (data) => {
+            setFinalStats(prev => {
+                return prev.filter(player => player.userid !== data.userid);
+            });
+            setFinalStats(prev => {
+                return [...prev, { userid: data.userid, username: data.username, stats: data.stats }]
+            });
         });
 
         socket.on('game-ready', (data) => {
@@ -128,6 +203,8 @@ const Lobby = () => {
             setTime(data.startTime);
             setPendingWords(data.paragraph);
             setDiffculty(data.difficulty);
+            setFinalStats([]);
+            setPlayersStats([]);
             setStatus('ready');
         });
 
@@ -138,8 +215,11 @@ const Lobby = () => {
         socket.connect();
         // console.log(lobbyCode, multiPlayerUsername);
         socket.emit('player-joined', { lobbyCode, userid: multiPlayerUserid, username: multiPlayerUsername });
-
-
+        // setUsers(
+        //     prev => {
+        //         return [...prev, { userid: multiPlayerUserid, username: multiPlayerUsername }];
+        //     }
+        // );
     }, []);
 
     useEffect(() => {
@@ -148,6 +228,7 @@ const Lobby = () => {
             setAccuracy(calcAccuracy());
             setGrossWPM(calulateGrossWPM());
             setNetWPM(calulateNetWPM());
+            sendProgressReport();
         }, 1000);
         const timerId2 = time === 0 && status === 'start' && handleTypingEnd();
 
@@ -166,6 +247,7 @@ const Lobby = () => {
 
     const handleGameStart = async () => {
         const paragraph = await fetchParagraph();
+        setStats({ inputChars: 0, goodChars: 0, totalChars: paragraph.length });
         socket.emit('start-game', {
             lobbyCode,
             waitTime: waitTime,
@@ -174,12 +256,32 @@ const Lobby = () => {
             paragraph: paragraph
         });
         setStatus('ready');
+        setPlayersStats([])
+        setFinalStats([])
     }
 
     const handleTypingEnd = () => {
         setStatus('stop');
         handleReset();
-        socket.emit('end-game', { lobbyCode, userid: multiPlayerUserid, username: multiPlayerUsername, stats: { grossWPM, netWPM, accuracy, time, difficulty } });
+        socket.emit('player-finish-info', { lobbyCode, userid: multiPlayerUserid, username: multiPlayerUsername, stats: { grossWPM, netWPM, accuracy, time, difficulty } });
+        setFinalStats(prev => {
+            return [...prev, { userid: multiPlayerUserid, username: multiPlayerUsername, stats: { grossWPM, netWPM, accuracy, time, difficulty } }]
+        });
+    }
+
+    const sendProgressReport = () => {
+        const goodChars = stats.goodChars;
+        const inputChars = stats.inputChars;
+        const totalChars = stats.totalChars;
+        socket.emit('player-progress-info', { lobbyCode, userid: multiPlayerUserid, username: multiPlayerUsername, stats: { grossWPM, netWPM, accuracy, inputChars, totalChars, goodChars } });
+
+        setPlayersStats(prev => {
+            return prev.filter(player => player.userid !== multiPlayerUserid);
+        });
+        setPlayersStats(prev => {
+            return [...prev, { userid: multiPlayerUserid, username: multiPlayerUsername, stats: { grossWPM, netWPM, accuracy, inputChars, totalChars, goodChars } }]
+        });
+
     }
 
     const calulateGrossWPM = () => {
@@ -203,6 +305,8 @@ const Lobby = () => {
             if (!letter.correct) uncorrectedErrors++;
         });
 
+        if (stats.inputChars === 0) return 0;
+
         return (((stats.inputChars - uncorrectedErrors) / stats.inputChars) * 100).toFixed(0);
     }
 
@@ -210,82 +314,69 @@ const Lobby = () => {
 
 
     return (
-        <>
-            <div>Lobby</div>
-            <div>{lobbyCode}</div>
-            <div>{multiPlayerUsername}</div>
-            <div>
-                {announcements.map((announcement, index) => {
-                    return (
-                        <div key={index}>{announcement}</div>
-                    )
-                })}
-            </div>
-            {multiPlayerUsername === lobbyInfo.ownerName && <Button onClick={handleGameStart}>Start Game</Button>}
-            <Flex align={"center"} h={'70vh'} direction={'column'} pt={'100px'}>
-                {status === "stop" &&
-                    (
-                        <>
-                            <Flex justify={'space-between'} w={'80%'}>
-                                <CountUp start={0} end={grossWPM} delay={0}>
-                                    {({ countUpRef }) => (
-                                        <StatsIcon
-                                            label={"Gross WPM"}
-                                            progress={grossWPM}
-                                            icon={grossWPM > 50 ? "up" : "down"}
-                                            countUpRef={countUpRef}
-                                        />
-                                    )}
-                                </CountUp>
-                                <CountUp start={0} end={netWPM} delay={0}>
-                                    {({ countUpRef }) => (
-                                        <StatsIcon
-                                            label={"Net WPM"}
-                                            progress={netWPM}
-                                            icon={netWPM > 50 ? "up" : "down"}
-                                            countUpRef={countUpRef}
-                                        />
-                                    )}
-                                </CountUp>
-                                <CountUp start={0} end={accuracy} delay={0}>
-                                    {({ countUpRef }) => (
-                                        <StatsIcon
-                                            label={"Accuracy"}
-                                            progress={accuracy}
-                                            icon={accuracy > 85 ? "up" : "down"}
-                                            countUpRef={countUpRef}
-                                        />
-                                    )}
-                                </CountUp>
-                            </Flex>
-                        </>
-                    )
-                }
-                <Flex w="80vw" h={"50vh"} direction={'column'}>
-                    {status === "start" && <Timer count={time} maxCount={startTime} />}
-                    {status === "ready" && <Timer count={waitTime} maxCount={5} />}
+
+
+        <Flex w={'90vw'} h={'90vh'} p={'20px'} sx={classes.border} direction={'column'} m={'auto'}>
+            <Flex mih={'45%'} w={'98%'} sx={classes.border}>
+                <Flex miw={'75%'} sx={classes.progressFlex} gap={"20px"} direction={'column'} align={'center'}>
+                    {
+                        status === 'start' && playersStats.map((player, index) => {
+                            return (
+                                <ProgressSlider key={index} username={player.username} value={player.stats.inputChars} end={player.stats.totalChars} />
+                            )
+                        })
+                    }
+                    {
+                        status === 'wait' && finalStats.map((player, index) => {
+                            return (
+                                <ProgressSlider key={index} username={player.username} value={player.stats.netWPM} end={0} />
+                            )
+                        })
+                    }
+
+
+                </Flex>
+                <Flex miw={'20%'} sx={classes.controls} justify={'space-between'} p={'10px'} direction={'column'} gap={'2rem'}>
+                    <Flex justify={'center'}>
+                        <Title order={1} align={'center'}>Controls</Title>
+                    </Flex>
+                    {
+                        (status === 'start' || status === 'ready') &&
+                        <Flex justify={'center'} align={'center'}>
+                            {status === "start" && <Timer count={time} maxCount={startTime} />}
+                            {status === "ready" && <Timer count={waitTime} maxCount={5} />}
+                        </Flex>}
+                    {multiPlayerUsername === lobbyInfo.ownerName && status == 'wait' && <Difficulty difficulty={difficulty} setDiffculty={setDiffculty} center={false} />}
+                    {multiPlayerUsername === lobbyInfo.ownerName && status === 'wait' && <Timing startTime={startTime} setStartTime={setStartTime} setTime={setTime} center={false} />}
+                    <Flex justify={'center'}>
+                        {multiPlayerUsername === lobbyInfo.ownerName && <Button onClick={handleGameStart} w={'200px'}>Start Game</Button>}
+                        {multiPlayerUsername !== lobbyInfo.ownerName && <Button w={'250px'} disabled>Waiting for host to start game</Button>}
+                    </Flex>
+                </Flex>
+            </Flex>
+            <Flex mih={'45%'} w={'98%'} sx={classes.border} mt={'2px'}>
+                <Flex miw={'75%'} maw={'75%'} sx={classes.border} justify={'center'} align={'center'}>
                     {(pendingWords?.length > 0) && (status === "start") && <TypeWriter
                         doneWords={doneWords}
                         pendingWords={pendingWords}
                         handleKeyDown={handleKeyDown}
                         handleReset={handleReset}
+                        short={true}
                     />}
+                    {status === "stop" && <DisplayStats grossWPM={grossWPM} netWPM={netWPM} accuracy={accuracy} />}
                 </Flex>
-                {
-                    multiPlayerUsername === lobbyInfo.ownerName &&
-                    <Flex justify={'center'} w="80vw" align={'center'} >
-                        {status == 'wait' && <Difficulty difficulty={difficulty} setDiffculty={setDiffculty} />}
-
-                        <Tooltip label="reset">
-                            <IconKeyboard size={"100px"} onClick={handleReset} />
-                        </Tooltip>
-
-                        {status === 'wait' && <Timing startTime={startTime} setStartTime={setStartTime} setTime={setTime} />}
-
+                <Flex mah={'100%'} miw={'20%'} p={'10px'} gap={'2px'} direction={'column'} sx={classes.announcement}>
+                    <Title order={1} align={'center'}>Announcements</Title>
+                    <Flex justify={'center'} align={'center'} direction={'column'} sx={classes.innerAnnouncement} mah={'100%'}>
+                        {announcements.map((announcement, index) => {
+                            return (
+                                <span key={index}>{announcement}</span>
+                            )
+                        })}
                     </Flex>
-                }
+                </Flex>
             </Flex>
-        </>
+        </Flex>
     )
 }
 

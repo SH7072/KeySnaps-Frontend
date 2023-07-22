@@ -10,6 +10,7 @@ import Progress from "../TypeWriter/Progress";
 import StatsIcon from "../TypeWriter/StatsIcon";
 import Timing from "../TypeWriter/Timing";
 import Difficulty from "../TypeWriter/Diffculty";
+import { useNavigate } from "react-router";
 
 
 
@@ -22,7 +23,19 @@ const modes = {
 
 
 const Practice = ({ }) => {
-    const [startTime, setStartTime] = useState(10);
+
+    const username = sessionStorage.getItem('username');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (username === null) {
+            navigate('/userinfo');
+        }
+    }, []);
+
+
+
+    const [startTime, setStartTime] = useState(30);
     const [difficulty, setDiffculty] = useState('easy');
     const [doneWords, setDoneWords] = useState([]);
     const [pendingWords, setPendingWords] = useState("");
@@ -34,7 +47,7 @@ const Practice = ({ }) => {
     const [accuracy, setAccuracy] = useState(0);
 
     const isLoggedIn = sessionStorage.getItem('isLoggedIn')
-    if(isLoggedIn === null || isLoggedIn === false) {
+    if (isLoggedIn === null || isLoggedIn === false) {
         sessionStorage.setItem('isLoggedIn', false);
     }
     // console.log(isLoggedIn);
@@ -49,7 +62,7 @@ const Practice = ({ }) => {
 
         // const userId=sessionStorage.
         const url = `${process.env.REACT_APP_BACKEND_URL}/score/newScore`;
-            console.log(startTime);
+        console.log(startTime);
         const res = await fetch(url, {
             method: 'POST',
             headers: {
@@ -57,33 +70,32 @@ const Practice = ({ }) => {
                 'authorization': `Bearer ${sessionStorage.getItem('token')}`,
             },
             body: JSON.stringify({
-                
-                'userId':`${sessionStorage.getItem('userId')}`,
+
+                'userId': `${sessionStorage.getItem('userId')}`,
                 'speed': netWPM,
                 'accuracy': accuracy,
                 'time': startTime,
 
             })
         });
-        
+
         const data = await res.json();
-        
+
         console.log(data);
     }
 
     useEffect(() => {
         fetchParagraph();
     }, [difficulty]);
-    
+
 
     // console.log(startTime, difficulty);
     console.log(time, status, stats, grossWPM, netWPM, accuracy);
 
     const handleTypingEnd = async () => {
         setStatus('stop');
-        
-        if(isLoggedIn)
-        {
+
+        if (isLoggedIn) {
             await sendStats();
         }
         const recentStats = sessionStorage.getItem('recentStats');

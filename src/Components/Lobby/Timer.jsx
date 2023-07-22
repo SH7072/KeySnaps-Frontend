@@ -20,11 +20,11 @@ const Timer = ({ count, maxCount, ...props }) => {
                 {...props}
                 roundCaps
                 thickness={6}
-                size={50}
+                size={100}
                 sections={[{ value: count * (100 / maxCount), color: theme.primaryColor }]}
                 label={
                     <div>
-                        <Text ta="center" fz="sm" className={classes.label}>
+                        <Text ta="center" fz="2rem" className={classes.label}>
                             {count}
                         </Text>
                     </div>

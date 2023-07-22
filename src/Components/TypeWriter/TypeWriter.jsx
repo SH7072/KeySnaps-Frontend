@@ -1,7 +1,7 @@
 import { Button, Container, Flex, Text } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 
-const TypeWriter = ({ doneWords, pendingWords, handleKeyDown, handleReset }) => {
+const TypeWriter = ({ doneWords, pendingWords, handleKeyDown, handleReset, short = false }) => {
 
     const gameInput = useRef(null);
 
@@ -15,6 +15,7 @@ const TypeWriter = ({ doneWords, pendingWords, handleKeyDown, handleReset }) => 
         <>
 
             <div
+                className={`${short ? 'short' : ''}`}
                 ref={gameInput} tabIndex="0" onBlur={() => gameInput.current?.focus()} id="game_words"
                 onKeyDown={(e) => handleKeyDown(e)}
             >
