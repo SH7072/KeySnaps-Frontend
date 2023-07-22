@@ -92,24 +92,6 @@ const Profile = () => {
             </>
         )
     }
-    // return (
-    //     <>
-    //         {isLoggedIn && <div className={classes.main_container}>
-    //             {
-    //                 data && <User data={data} />
-    //             }
-    //             {scores.length > 0 && <History scores={scores} />}
-    //         </div>
-    //         }
-    //         {isLoggedIn === false && <div className={classes.main_container}>
-
-    //             {/* {stats.length > 0 && <User stats={stats} />} */}
-    //             {stats.length > 0 && <Stat stats={stats} />}
-
-    //         </div>
-    //         }
-    //     </>
-    // )
 }
 
 export default Profile
