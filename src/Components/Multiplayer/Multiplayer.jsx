@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { createStyles, Flex, Box, Text, Anchor, Button } from "@mantine/core";
+import { createStyles, Flex, Box, Text, Anchor, Button, Title } from "@mantine/core";
+import { useNavigate } from 'react-router';
+import LobbyTable from './LobbyTable';
 
 
 
@@ -28,30 +30,32 @@ const useStyles = createStyles((theme) => ({
         margin: "1rem",
         marginRight: "0rem",
         flexDirection: "row",
+        height: "80vh",
+
 
     },
     text_c: {
         width: "100%",
-        height:"12rem",
+        height: "12rem",
         flexDirection: "row",
         justifyContent: "center",
-        textAlign:"center"
-        
+        textAlign: "center"
+
     },
     createLobby: {
         width: "100%",
         height: "3rem",
         flexDirection: "column  ",
         justifyContent: "center",
-        alignItems:"center  ",
-        
+        alignItems: "center  ",
+
     },
     joinLobby: {
         width: "100%",
         height: "3rem",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems:"center  ",
+        alignItems: "center  ",
 
     }
 }));
@@ -61,6 +65,7 @@ const useStyles = createStyles((theme) => ({
 const Multiplayer = () => {
 
     const { classes, theme } = useStyles();
+    const navigate = useNavigate();
 
     return (
         <>
@@ -73,20 +78,23 @@ const Multiplayer = () => {
                         </Text>
                     </Flex>
                     <Flex className={classes.createLobby}>
-                        <Button >
+                        <Button onClick={() => navigate('/createlobby')}>
                             Create Lobby
                         </Button>
                     </Flex>
 
-                    <Flex  className={classes.joinLobby}>
-                    <Button >
+                    <Flex className={classes.joinLobby}>
+                        <Button onClick={() => navigate('/joinlobby')}>
                             Join Lobby
                         </Button>
                     </Flex>
                 </Flex>
 
-                <Flex className={classes.container2}>
-
+                <Flex className={classes.container2} justify={'space-around'}>
+                    <Flex align={'center'}>
+                        <Title>Public Lobby Code To Join</Title>
+                    </Flex>
+                    <LobbyTable />
                 </Flex>
             </div>
         </>

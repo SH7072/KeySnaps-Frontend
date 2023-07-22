@@ -393,14 +393,14 @@ const Lobby = () => {
                             {status === "start" && <Timer count={time} maxCount={startTime} />}
                             {status === "ready" && <Timer count={waitTime} maxCount={5} />}
                         </Flex>}
-                    {multiPlayerUsername === lobbyInfo.ownerName && status == 'wait' && <Difficulty difficulty={difficulty} setDiffculty={setDiffculty} center={false} />}
-                    {multiPlayerUsername === lobbyInfo.ownerName && status === 'wait' && <Timing startTime={startTime} setStartTime={setStartTime} setTime={setTime} center={false} />}
+                    {multiPlayerUserid === lobbyInfo.ownerId && status == 'wait' && <Difficulty difficulty={difficulty} setDiffculty={setDiffculty} center={false} />}
+                    {multiPlayerUserid === lobbyInfo.ownerId && status === 'wait' && <Timing startTime={startTime} setStartTime={setStartTime} setTime={setTime} center={false} />}
                     {status === 'wait' && <Flex justify={'center'} align={'center'} direction={'column'} gap={'10px'}>
                         <ButtonCopy lobbyCode={lobbyCode} />
-                        {multiPlayerUsername === lobbyInfo.ownerName && <Button onClick={handleGameStart} w={'250px'}>Start Game</Button>}
-                        {multiPlayerUsername === lobbyInfo.ownerName && <Button w={'250px'} color="red" onClick={handleEndGame}>End Game</Button>}
-                        {multiPlayerUsername !== lobbyInfo.ownerName && <Button w={'250px'} disabled>Waiting for host to start game</Button>}
-                        {multiPlayerUsername !== lobbyInfo.ownerName && <Button w={'250px'} onClick={handleLeaveLobby}>Leave Lobby</Button>}
+                        {multiPlayerUserid === lobbyInfo.ownerId && <Button onClick={handleGameStart} w={'80%'}>Start Game</Button>}
+                        {multiPlayerUserid === lobbyInfo.ownerId && <Button w={'80%'} color="red" onClick={handleEndGame}>End Game</Button>}
+                        {multiPlayerUserid !== lobbyInfo.ownerId && <Button w={'80%'} disabled>Waiting for host to start game</Button>}
+                        {multiPlayerUserid !== lobbyInfo.ownerId && <Button w={'80%'} onClick={handleLeaveLobby}>Leave Lobby</Button>}
                     </Flex>}
                 </Flex>
             </Flex>

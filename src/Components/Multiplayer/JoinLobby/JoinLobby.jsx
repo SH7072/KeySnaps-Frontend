@@ -9,7 +9,7 @@ const JoinLobby = () => {
     const isLoggedIn = sessionStorage.getItem('isLoggedIn');
 
     const [username, setUsername] = useState(isLoggedIn === 'true' ? sessionStorage.getItem('username') : '');
-    const [lobbyCode, setLobbyCode] = useState(null);
+    const [lobbyCode, setLobbyCode] = useState("");
 
     const naviagte = useNavigate();
 
@@ -37,7 +37,7 @@ const JoinLobby = () => {
             }
         }
         catch (error) {
-            console.log(error, "error");
+            console.log(error.message, "error");
         }
     }
 

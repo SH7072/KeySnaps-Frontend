@@ -9,7 +9,7 @@ const CreateLobby = () => {
   const isLoggedIn = sessionStorage.getItem('isLoggedIn');
 
   const [username, setUsername] = useState(isLoggedIn === 'true' ? sessionStorage.getItem('username') : '');
-  const [isPublic, setIsPublic] = useState(false);
+  const [isPublic, setIsPublic] = useState(true);
 
   const naviagte = useNavigate();
 
@@ -60,8 +60,8 @@ const CreateLobby = () => {
           <Flex justify={'space-between'} align={'center'} mt={'5px'}>
             <Checkbox
               label="Private Room"
-              checked={isPublic}
-              onChange={(e) => setIsPublic(e.currentTarget.checked)}
+              checked={!isPublic}
+              onChange={(e) => setIsPublic(!e.currentTarget.checked)}
               mb={'10px'}
             />
 
