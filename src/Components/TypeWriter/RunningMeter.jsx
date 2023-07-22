@@ -10,7 +10,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-const Progress = ({ count, ...props }) => {
+const RunningMeter = ({ count, accuracy, ...props }) => {
 
     const { classes, theme } = useStyles();
 
@@ -22,12 +22,12 @@ const Progress = ({ count, ...props }) => {
                 {...props}
                 roundCaps
                 thickness={6}
-                size={50}
+                size={100}
                 sections={[{ value: count, color: theme.primaryColor }]}
                 label={
                     <div>
-                        <Text ta="center" fz="sm" className={classes.label}>
-                            {count}
+                        <Text ta="center" fz="md" className={classes.label}>
+                            {count == "Infinity" ? "" : count} {accuracy ? "%" : "WPM"}
                         </Text>
                     </div>
                 }
@@ -36,4 +36,4 @@ const Progress = ({ count, ...props }) => {
     );
 }
 
-export default Progress;
+export default RunningMeter;

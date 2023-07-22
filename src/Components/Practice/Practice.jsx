@@ -1,4 +1,4 @@
-import { Box, Center, Flex, SegmentedControl, Tooltip } from "@mantine/core";
+import { Box, Center, Flex, Group, SegmentedControl, Tooltip } from "@mantine/core";
 import TypeWriter from "../TypeWriter/TypeWriter";
 import NavBar from "../NavBar/NavBar";
 import { IconClockHour3, IconHash, IconKeyboard } from "@tabler/icons-react";
@@ -11,6 +11,7 @@ import StatsIcon from "../TypeWriter/StatsIcon";
 import Timing from "../TypeWriter/Timing";
 import Difficulty from "../TypeWriter/Diffculty";
 import { useNavigate } from "react-router";
+import RunningMeter from "../TypeWriter/RunningMeter";
 
 
 
@@ -45,6 +46,11 @@ const Practice = ({ }) => {
     const [grossWPM, setGrossWPM] = useState(0);
     const [netWPM, setNetWPM] = useState(0);
     const [accuracy, setAccuracy] = useState(0);
+
+    const [runningGrossWPM, setRunningGrossWPM] = useState(0);
+    const [runningNetWPM, setRunningNetWPM] = useState(0);
+    const [runningAccuracy, setRunningAccuracy] = useState(0);
+
 
     const isLoggedIn = sessionStorage.getItem('isLoggedIn')
     if (isLoggedIn === null || isLoggedIn === false) {
@@ -131,6 +137,9 @@ const Practice = ({ }) => {
             setAccuracy(calcAccuracy());
             setGrossWPM(calulateGrossWPM());
             setNetWPM(calulateNetWPM());
+            setRunningAccuracy(calcAccuracy2());
+            setRunningGrossWPM(calulateGrossWPM2());
+            setRunningNetWPM(calulateNetWPM2());
         }, 1000);
         const timerId2 = time === 0 && status === 'start' && handleTypingEnd();
 
@@ -200,7 +209,7 @@ const Practice = ({ }) => {
 
 
     const calulateGrossWPM = () => {
-        console.log(stats.inputChars, startTime);
+        // console.log(stats.inputChars, startTime);
         return (60 * (stats.inputChars) / (5 * startTime)).toFixed(2);
     }
 
@@ -215,6 +224,38 @@ const Practice = ({ }) => {
 
 
     const calcAccuracy = () => {
+        // return ((calulateNetWPM() / calulateGrossWPM()) * 100).toFixed(0);
+        let uncorrectedErrors = 0;
+        doneWords && doneWords.forEach((letter) => {
+            if (!letter.correct) uncorrectedErrors++;
+        });
+
+        return (((stats.inputChars - uncorrectedErrors) / stats.inputChars) * 100).toFixed(0);
+    }
+
+    const calulateGrossWPM2 = () => {
+        // console.log(stats.inputChars, startTime);
+
+        if (startTime - time === 0) return 0;
+
+        return (60 * (stats.inputChars) / (5 * (startTime - time))).toFixed(2);
+    }
+
+    const calulateNetWPM2 = () => {
+
+
+        if (startTime - time === 0) return 0;
+
+        let uncorrectedErrors = 0;
+        doneWords && doneWords.forEach((letter) => {
+            if (!letter.correct) uncorrectedErrors++;
+        });
+
+        return ((60 * (Number((stats.inputChars / 5)) - (uncorrectedErrors))) / ((startTime - time))).toFixed(2);
+    }
+
+
+    const calcAccuracy2 = () => {
         // return ((calulateNetWPM() / calulateGrossWPM()) * 100).toFixed(0);
         let uncorrectedErrors = 0;
         doneWords && doneWords.forEach((letter) => {
@@ -269,7 +310,16 @@ const Practice = ({ }) => {
                 }
 
                 <Flex w="80vw" h={"50vh"} direction={'column'}>
-                    {status === "start" && <Progress count={time} />}
+                    <Flex justify={'space-between'}>
+                        {status === "start" && <Progress count={time} />}
+                        <Group>
+
+                            {status === "start" && <RunningMeter count={runningGrossWPM} accuracy={false} />}
+                            {/* {status === "start" && <RunningMeter count={runningNetWPM} />} */}
+                            {status === "start" && <RunningMeter count={runningAccuracy} accuracy={true} />}
+                        </Group>
+
+                    </Flex>
                     {(pendingWords?.length > 0) && (status === "wait" || status === "start") && <TypeWriter
                         doneWords={doneWords}
                         pendingWords={pendingWords}

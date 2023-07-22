@@ -61,7 +61,6 @@ const DisplayResults = ({ opened, handleClose, finalStats }) => {
     return (
         <>
             <Modal opened={opened} onClose={handleClose} title="Results" centered size={'50%'}>
-                <h1>Display Result</h1>
                 <ScrollArea>
                     <Table sx={{ minWidth: 500 }} verticalSpacing="md">
                         <tbody>{rows}</tbody>
