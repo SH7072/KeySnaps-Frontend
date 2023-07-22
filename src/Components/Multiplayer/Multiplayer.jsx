@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { createStyles, Flex, Box, Text, Anchor, Button } from "@mantine/core";
+import { createStyles, Flex, Box, Text, Anchor, Button ,Title} from "@mantine/core";
 import NavBar from '../NavBar/NavBar';
 
 import { useNavigate } from 'react-router';
