@@ -19,6 +19,9 @@ import UserInfo from "./Components/UserInfo/UserInfo";
 import Lobby from "./Components/Lobby/Lobby";
 import Profile from "./Components/Profile/Profile";
 import LobbyUI from "./Components/Lobby/LobbyUI";
+import Multiplayer from "./Components/Multiplayer/Multiplayer";
+import NavBar from "./Components/NavBar/NavBar";
+import ColorSwitch from "./ColorSwitch";
 
 function Root() {
 
@@ -36,15 +39,16 @@ function Root() {
 
   return (
     <>
+      <NavBar />
       <Outlet />
     </>
   );
 }
 
 function App() {
-
   const router = createBrowserRouter(
     createRoutesFromElements(
+      
       <Route path="/" element={<Root />}>
         <Route path="register" element={<Signup />} />
         <Route path="login" element={<Login />} />
@@ -53,6 +57,7 @@ function App() {
         <Route path="practice" element={<Practice />} />
         <Route path="leaderboard" element={<LeaderBoard />} />
         {/* <Route path="lobby" element={<Lobby />} /> */}
+        <Route path="lobby" element={<Multiplayer />} />
         <Route path="createlobby" element={<CreateLobby />} />
         <Route path="joinlobby" element={<JoinLobby />} />
         <Route path='lobby/:lobbyCode' element={<Lobby />} />
@@ -60,6 +65,7 @@ function App() {
         <Route path='profile' element={<Profile />} />
         <Route path="*" element={<h1>Not Found</h1>} />
       </Route>
+
     ));
 
   return (

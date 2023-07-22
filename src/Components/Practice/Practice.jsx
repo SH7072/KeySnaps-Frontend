@@ -227,7 +227,7 @@ const Practice = ({ }) => {
 
     return (
         <>
-            <NavBar />
+           
             <Flex align={"center"} h={'70vh'} direction={'column'} pt={'100px'}>
                 {status === "stop" &&
                     (
