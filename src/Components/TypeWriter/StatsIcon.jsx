@@ -16,7 +16,7 @@ const useStyles = createStyles((theme) => ({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justify: 'space-between',
         textAlign: 'center',
         borderRadius: theme.radius.md,
         height: "100px",

@@ -41,6 +41,8 @@ const Home = () => {
         console.log('sjdius');
         sessionStorage.clear();
     }
+    console.log(isLoggedIn);
+    console.log(typeof isLoggedIn);
 
     return (
         <>
@@ -71,7 +73,7 @@ const Home = () => {
                         <IconTargetArrow />
                     </Flex>
                     {
-                        (isLoggedIn === 'false') ? (
+                        (isLoggedIn === 'false' || isLoggedIn === null) ? (
                             <>
                                 <Flex size={'2rem'} onClick={() => naviagte('/login')}>
                                     <Text sx={classes.text}>

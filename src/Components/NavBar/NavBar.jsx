@@ -40,7 +40,7 @@ const NavBar = () => {
     return (
         <>
             <Flex justify={'space-between'} p={'10px'}>
-                <Title order={3} style={{ color: 'black', fontFamily: 'Ubuntu Mono' }} onClick={() => navigate('/home')}>KeySnaps</Title>
+                <Title order={3} sx={{ color: 'black', fontFamily: 'Ubuntu Mono' }} onClick={() => navigate('/home')}>KeySnaps</Title>
                 <Group m={0} pr={'10px'}>
                     <Menu>
                         <Menu.Target>

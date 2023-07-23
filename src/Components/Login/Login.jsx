@@ -10,8 +10,8 @@ const useStyles = createStyles((theme) => ({
         backgroundColor: '#fff',
         height: '100vh',
         width: '100vw',
-        justifyContent:"center",
-        alignContent:"center",
+        justifyContent: "center",
+        alignContent: "center",
     },
     link: {
         textDecoration: 'none',
@@ -20,18 +20,18 @@ const useStyles = createStyles((theme) => ({
         fontWeight: 500,
     },
     logo: {
-        color: '#fff',
-        fontWeight: 700,
-        letterSpacing: '0.1rem',
-        textShadow: '0 0 1rem rgba(0,0,0,0.5)',
+        // color: '#fff',
+        // fontWeight: 700,
+        // letterSpacing: '0.1rem',
+        // textShadow: '0 0 1rem rgba(0,0,0,0.5)',
         position: 'absolute',
         top: '1rem',
         left: '1rem',
-        fontFamily: 'roboto mono',
-        fontSize: '2.5rem',
-        color: 'black',
-        textShadow: '0 0 5px black',
-        paddingRight: '1rem'
+        fontFamily: 'Ubuntu Mono',
+        // fontSize: '2.5rem',
+        // color: 'black',
+        // textShadow: '0 0 5px black',
+        // paddingRight: '1rem'
     }
 }));
 
@@ -111,11 +111,12 @@ const Login = () => {
     return (
         <>
             <Paper sx={classes.body}>
-                <Title order={1} align={'center'} sx={classes.logo}>Login</Title>
-                
+                {/* <Title order={1} align={'center'} sx={classes.logo}>Login</Title> */}
+                <Title order={3} sx={classes.logo} onClick={() => navigate('/home')}>KeySnaps</Title>
+
                 <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'} >
-                    <Paper w={'60%'} p={10} shadow="xl" justifyContent="center">
-                        <Title order={1} align={'center'}>Log In</Title>
+                    <Paper w={'60%'} p={10} shadow="xl">
+                        <Title order={1} align={'center'} sx={{ fontFamily: 'Ubuntu Mono' }}>Log In</Title>
                         <Flex justify={'center'} align={'center'} mt={15}>
                             <ActionIcon variant="outline" color="blue" radius="xl" size="xl" style={{ margin: 'auto' }}>
                                 <IconBrandGoogle />
@@ -152,7 +153,7 @@ const Login = () => {
                             />
                             <Flex justify={'space-between'} mt={10}>
                                 <Link to="/register" className={classes.link}>
-                                    <Text align={'center'}>Don't have an account? Register</Text>
+                                    <Text align={'center'} sx={{ fontFamily: 'Ubuntu Mono' }}>Don't have an account? Register</Text>
                                 </Link>
                                 <Button color="blue" onClick={handleSubmit}>
                                     Login

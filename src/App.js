@@ -26,6 +26,7 @@ function Root() {
   useEffect(() => {
 
     const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+    console.log(typeof (isLoggedIn));
     if (isLoggedIn === null || isLoggedIn === false) {
       sessionStorage.setItem('isLoggedIn', false);
     }

@@ -12,8 +12,8 @@ const useStyles = createStyles((theme) => ({
         backgroundColor: '#fff',
         height: '100vh',
         width: '100vw',
-        justifyContent:"center",
-        alignContent:"center",
+        justifyContent: "center",
+        alignContent: "center",
     },
     link: {
         textDecoration: 'none',
@@ -22,22 +22,22 @@ const useStyles = createStyles((theme) => ({
         fontWeight: 500,
     },
     logo: {
-        color: '#fff',
-        fontSize: '2rem',
-        fontWeight: 700,
-        letterSpacing: '0.1rem',
-        textShadow: '0 0 1rem rgba(0,0,0,0.5)',
+        // color: '#fff',
+        // fontSize: '2rem',
+        // fontWeight: 700,
+        // letterSpacing: '0.1rem',
+        // textShadow: '0 0 1rem rgba(0,0,0,0.5)',
         position: 'absolute',
         top: '1rem',
         left: '1rem',
-        
-            fontFamily: 'roboto mono',
-            fontSize: '3rem',
-            
-            color: 'black',
-            textShadow: '0 0 5px black',
-            paddingRight: '1rem'
-        
+
+        fontFamily: 'ubuntu mono',
+        // fontSize: '3rem',
+
+        // color: 'black',
+        // textShadow: '0 0 5px black',
+        // paddingRight: '1rem'
+
     }
 }));
 
@@ -169,12 +169,12 @@ const Signup = () => {
     return (
         <>
             <Paper sx={classes.body} >
-                <Title order={1} align={'center'} sx={classes.logo}>Register</Title>
-                
+                <Title order={3} sx={classes.logo} onClick={() => navigate('/home')}>KeySnaps</Title>
+
                 <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'}  >
-                    < Paper p={10} miw={'60%'} maw={'60%'} w={'60%'} shadow="xl" justifyContent="center">
-                        <Title order={1} align={'center'}>Create an account</Title>
-                        <Text c="dimmed" align={'center'}>Enter your details below.</Text>
+                    < Paper p={10} miw={'60%'} maw={'60%'} w={'60%'} shadow="xl" justify="center">
+                        <Title order={1} align={'center'} sx={{ fontFamily: 'Ubuntu Mono' }}>Create an account</Title>
+                        <Text c="dimmed" align={'center'} sx={{ fontFamily: 'Ubuntu Mono' }}>Enter your details below.</Text>
                         <Flex justify={'center'} align={'center'}>
                             <ActionIcon variant="outline" color="blue" radius="xl" size="xl" style={{ margin: 'auto' }}>
                                 <IconBrandGoogle />
@@ -229,15 +229,16 @@ const Signup = () => {
                                 error={confirmPasswordError}
                             />
                             <Checkbox
-                                label="I agree to sell my soul and privacy to this corporation"
+                                label="I agree to terms and conditions"
                                 required
                                 checked={checked}
                                 onChange={(event) => setChecked(event.currentTarget.checked)}
                                 error={checkedError}
+                                sx={{ fontFamily: 'Ubuntu Mono' }}
                             />
                             <Flex justify={'space-between'} mt={10}>
                                 <Link to="/login" className={classes.link}>
-                                    <Text align={'center'}>Already have an account? Login</Text>
+                                    <Text align={'center'} sx={{ fontFamily: 'Ubuntu Mono' }}>Already have an account? Login</Text>
                                 </Link>
                                 <Button color="blue" onClick={handleSubmit}>
                                     Register

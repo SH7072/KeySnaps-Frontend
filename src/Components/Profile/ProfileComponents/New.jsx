@@ -62,40 +62,40 @@ const useStyles = createStyles((theme) => ({
 
 }));
 
-const New = ({username,stats}) => {
+const New = ({ username, stats }) => {
     const { classes, theme } = useStyles();
     console.log(username);
     console.log(stats);
-    const test=stats.length;
-    
+    const test = stats.length;
+
     const subjectTotals = stats.reduce((acc, subject) => {
         Object.keys(subject).forEach((subjectName) => {
-          acc[subjectName] = (acc[subjectName] || 0) + parseInt(subject[subjectName]);
+            acc[subjectName] = (acc[subjectName] || 0) + parseInt(subject[subjectName]);
         });
         return acc;
-      }, {});
-    
-      let totaltime=subjectTotals.time;
-      let overallAccuracy=subjectTotals.accuracy/test;
-      let averageSpeed=subjectTotals.netWPM/test;
-      console.log(averageSpeed);
-      console.log(overallAccuracy);
-      let dateObj = new Date(totaltime * 1000);
-      let hours = dateObj.getUTCHours();
-      let minutes = dateObj.getUTCMinutes();
-      let seconds = dateObj.getSeconds();
-  
-      const timeString = hours.toString().padStart(2, '0')
-          + ':' + minutes.toString().padStart(2, '0')
-          + ':' + seconds.toString().padStart(2, '0');
-      
+    }, {});
 
-        averageSpeed=Math.round((averageSpeed + Number.EPSILON) * 100) / 100
-        overallAccuracy=Math.round((overallAccuracy + Number.EPSILON) * 100) / 100
-        // console.log(timeString);
-        // console.log(overallAccuracy);
-        //  console.log(averageSpeed);
-    
+    let totaltime = subjectTotals.time;
+    let overallAccuracy = subjectTotals.accuracy / test;
+    let averageSpeed = subjectTotals.netWPM / test;
+    console.log(averageSpeed);
+    console.log(overallAccuracy);
+    let dateObj = new Date(totaltime * 1000);
+    let hours = dateObj.getUTCHours();
+    let minutes = dateObj.getUTCMinutes();
+    let seconds = dateObj.getSeconds();
+
+    const timeString = hours.toString().padStart(2, '0')
+        + ':' + minutes.toString().padStart(2, '0')
+        + ':' + seconds.toString().padStart(2, '0');
+
+
+    averageSpeed = Math.round((averageSpeed + Number.EPSILON) * 100) / 100
+    overallAccuracy = Math.round((overallAccuracy + Number.EPSILON) * 100) / 100
+    // console.log(timeString);
+    // console.log(overallAccuracy);
+    //  console.log(averageSpeed);
+
 
     return (
         <>

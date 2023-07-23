@@ -37,7 +37,7 @@ const useStyles = createStyles((theme) => ({
         width: "30%",
         height: "3rem",
         flexDirection: "column",
-        justifyContent: "center",
+        justify: "center",
     },
     profile_time: {
         width: "20%",
@@ -48,7 +48,7 @@ const useStyles = createStyles((theme) => ({
     announced_section_2: {
         width: '100%',
         marginTop: "1rem",
-        marginLeft:"1rem",
+        marginLeft: "1rem",
     },
     profile_averageScore: {
         width: "59%",
@@ -75,9 +75,9 @@ const User = ({ data }) => {
     const { classes, theme } = useStyles();
     const totalTest = data.scores.length;
     let speed = data.speed;
-    speed=Math.round((speed + Number.EPSILON) * 100) / 100
+    speed = Math.round((speed + Number.EPSILON) * 100) / 100
     let Accuracy = data.accuracy;
-    Accuracy=Math.round((Accuracy + Number.EPSILON) * 100) / 100
+    Accuracy = Math.round((Accuracy + Number.EPSILON) * 100) / 100
     return (
         <>
 

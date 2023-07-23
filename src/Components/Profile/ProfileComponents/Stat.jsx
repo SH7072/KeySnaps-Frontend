@@ -6,9 +6,9 @@ import { Box, } from "@mantine/core";
 
 const Stat = ({ stats }) => {
 
-    console.log(stats);
-    console.log("he");
-    
+    // console.log(stats);
+    // console.log("he");
+
     const columns = useMemo(
         () => [
             {
