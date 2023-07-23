@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Group, SegmentedControl, Tooltip } from "@mantine/core";
+import { Anchor, Box, Button, Center, Flex, Group, SegmentedControl, Tooltip } from "@mantine/core";
 import TypeWriter from "../TypeWriter/TypeWriter";
 import NavBar from "../NavBar/NavBar";
 import { IconClockHour3, IconHash, IconKeyboard } from "@tabler/icons-react";
@@ -12,6 +12,7 @@ import Timing from "../TypeWriter/Timing";
 import Difficulty from "../TypeWriter/Diffculty";
 import { useNavigate } from "react-router";
 import RunningMeter from "../TypeWriter/RunningMeter";
+import { Link } from "react-router-dom";
 
 
 
@@ -40,6 +41,7 @@ const Practice = ({ }) => {
     const [difficulty, setDiffculty] = useState('easy');
     const [doneWords, setDoneWords] = useState([]);
     const [pendingWords, setPendingWords] = useState("");
+    const [resetPragraph, setResetPragraph] = useState(false);
     const [status, setStatus] = useState('wait');
     const [stats, setStats] = useState({ inputChars: 0, goodChars: 0 });
     const [time, setTime] = useState(startTime);
@@ -56,17 +58,16 @@ const Practice = ({ }) => {
     if (isLoggedIn === null || isLoggedIn === false) {
         sessionStorage.setItem('isLoggedIn', false);
     }
-    // console.log(isLoggedIn);
+
     const fetchParagraph = async () => {
         const mode = modes[difficulty];
+        console.log(mode);
         const url = `${process.env.REACT_APP_BACKEND_URL}/paragraph/${mode}/`;
         const res = await fetch(url);
         const data = await res.json();
         setPendingWords(data['data']);
     }
     const sendStats = async () => {
-
-        // const userId=sessionStorage.
         const url = `${process.env.REACT_APP_BACKEND_URL}/score/newScore`;
         console.log(startTime);
         const res = await fetch(url, {
@@ -76,12 +77,10 @@ const Practice = ({ }) => {
                 'authorization': `Bearer ${sessionStorage.getItem('token')}`,
             },
             body: JSON.stringify({
-
                 'userId': `${sessionStorage.getItem('userId')}`,
                 'speed': netWPM,
                 'accuracy': accuracy,
                 'time': startTime,
-
             })
         });
 
@@ -92,10 +91,8 @@ const Practice = ({ }) => {
 
     useEffect(() => {
         fetchParagraph();
-    }, [difficulty]);
+    }, [difficulty, resetPragraph]);
 
-
-    // console.log(startTime, difficulty);
     console.log(time, status, stats, grossWPM, netWPM, accuracy);
 
     const handleTypingEnd = async () => {
@@ -138,8 +135,8 @@ const Practice = ({ }) => {
             setGrossWPM(calulateGrossWPM());
             setNetWPM(calulateNetWPM());
             setRunningAccuracy(calcAccuracy2());
-            setRunningGrossWPM(calulateGrossWPM2());
-            setRunningNetWPM(calulateNetWPM2());
+            setRunningGrossWPM(calulateRelativeGrossWPM());
+            setRunningNetWPM(calculateRelativeNetWPM());
         }, 1000);
         const timerId2 = time === 0 && status === 'start' && handleTypingEnd();
 
@@ -198,7 +195,8 @@ const Practice = ({ }) => {
     const handleReset = () => {
         setDoneWords([])
         // setPendingWords("")
-        setDiffculty(difficulty)
+        // setDiffculty(difficulty)
+        setResetPragraph(!resetPragraph);
         setStatus('wait')
         setStats({ inputChars: 0, goodChars: 0 })
         setTime(startTime)
@@ -219,7 +217,8 @@ const Practice = ({ }) => {
             if (!letter.correct) uncorrectedErrors++;
         });
 
-        return ((60 * (Number((stats.inputChars / 5)) - (uncorrectedErrors))) / (startTime)).toFixed(2);
+        const speed = ((60 * (Number((stats.inputChars / 5)) - (uncorrectedErrors))) / (startTime));
+        return speed > 0 ? speed.toFixed(2) : (0).toFixed(2);
     }
 
 
@@ -233,17 +232,12 @@ const Practice = ({ }) => {
         return (((stats.inputChars - uncorrectedErrors) / stats.inputChars) * 100).toFixed(0);
     }
 
-    const calulateGrossWPM2 = () => {
-        // console.log(stats.inputChars, startTime);
-
+    const calulateRelativeGrossWPM = () => {
         if (startTime - time === 0) return 0;
-
         return (60 * (stats.inputChars) / (5 * (startTime - time))).toFixed(2);
     }
 
-    const calulateNetWPM2 = () => {
-
-
+    const calculateRelativeNetWPM = () => {
         if (startTime - time === 0) return 0;
 
         let uncorrectedErrors = 0;
@@ -251,17 +245,17 @@ const Practice = ({ }) => {
             if (!letter.correct) uncorrectedErrors++;
         });
 
-        return ((60 * (Number((stats.inputChars / 5)) - (uncorrectedErrors))) / ((startTime - time))).toFixed(2);
+        const speed = ((60 * (Number((stats.inputChars / 5)) - (uncorrectedErrors))) / ((startTime - time)));
+        return speed > 0 ? speed.toFixed(2) : (0).toFixed(2);
     }
 
 
     const calcAccuracy2 = () => {
-        // return ((calulateNetWPM() / calulateGrossWPM()) * 100).toFixed(0);
+        if (stats.inputChars === 0) return 0;
         let uncorrectedErrors = 0;
         doneWords && doneWords.forEach((letter) => {
             if (!letter.correct) uncorrectedErrors++;
         });
-
         return (((stats.inputChars - uncorrectedErrors) / stats.inputChars) * 100).toFixed(0);
     }
 
@@ -311,12 +305,12 @@ const Practice = ({ }) => {
 
                 <Flex w="80vw" h={"50vh"} direction={'column'}>
                     <Flex justify={'space-between'}>
-                        {status === "start" && <Progress count={time} />}
+                        {status === "start" && <RunningMeter count={time} label={'Time Left'} />}
                         <Group>
 
-                            {status === "start" && <RunningMeter count={runningGrossWPM} accuracy={false} />}
-                            {/* {status === "start" && <RunningMeter count={runningNetWPM} />} */}
-                            {status === "start" && <RunningMeter count={runningAccuracy} accuracy={true} />}
+                            {status === "start" && <RunningMeter count={runningGrossWPM} label={'Gross WPM'} />}
+                            {status === "start" && <RunningMeter count={runningNetWPM} label={'Net WPM'} />}
+                            {status === "start" && <RunningMeter count={runningAccuracy} label={'Accuracy'} />}
                         </Group>
 
                     </Flex>
@@ -328,7 +322,7 @@ const Practice = ({ }) => {
                     />}
                 </Flex>
                 <Flex justify={'center'} w="80vw" align={'center'} >
-                    {status == 'wait' && <Difficulty difficulty={difficulty} setDiffculty={setDiffculty} />}
+                    {status === 'wait' && <Difficulty difficulty={difficulty} setDiffculty={setDiffculty} />}
 
                     <Tooltip label="reset">
                         <IconKeyboard size={"100px"} onClick={handleReset} />
@@ -338,6 +332,13 @@ const Practice = ({ }) => {
 
                 </Flex>
             </Flex>
+            {status !== 'start' && <Flex sx={{ position: 'absolute', bottom: '1rem', right: '1rem' }}>
+                <Button variant="subtle">
+                    <a href="https://www.speedtypingonline.com/typing-equations" target="_blank" className="link">
+                        Learn How We Score You
+                    </a>
+                </Button>
+            </Flex>}
         </>
     );
 }

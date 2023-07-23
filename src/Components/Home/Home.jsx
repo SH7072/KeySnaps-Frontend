@@ -7,7 +7,7 @@ import Typewriter from 'typewriter-effect';
 
 const useStyles = createStyles((theme) => ({
     text: {
-        fontFamily: 'roboto mono',
+        fontFamily: 'Ubuntu Mono',
         fontSize: '1.2rem',
         fontWeight: 'bold',
         color: 'black',
@@ -15,15 +15,17 @@ const useStyles = createStyles((theme) => ({
         paddingRight: '1rem'
     },
     heading: {
-        fontFamily: 'roboto mono',
+        fontFamily: 'Ubuntu Mono',
         fontSize: '5rem',
         fontWeight: '700',
         color: 'black',
         textShadow: '0 0 10px black',
         paddingRight: '1rem',
         width: '100px',
-        position: 'absolute',
-        top: 100
+        position: 'relative',
+        left: '50px',
+        bottom: '100px'
+
     }
 }));
 
@@ -35,12 +37,6 @@ const Home = () => {
     const { classes } = useStyles();
     const naviagte = useNavigate();
 
-    // useEffect(() => {
-    //     setInterval(() => {
-    //         setState(true);
-    //     }, 10000);
-    // })
-
     const handleLogout = () => {
         console.log('sjdius');
         sessionStorage.clear();
@@ -48,7 +44,7 @@ const Home = () => {
 
     return (
         <>
-            <Flex >
+            <Flex h={'100vh'} w={'100vw'} mt={'50px'}>
                 <Flex direction={'column'} w={'50%'} ml={'25vw'} pt={"200px"}>
                     <Flex size={'2rem'} onClick={() => naviagte('/userInfo')}>
                         <Text sx={classes.text} >

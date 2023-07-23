@@ -10,7 +10,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-const RunningMeter = ({ count, accuracy, ...props }) => {
+const RunningMeter = ({ count, label, ...props }) => {
 
     const { classes, theme } = useStyles();
 
@@ -27,7 +27,10 @@ const RunningMeter = ({ count, accuracy, ...props }) => {
                 label={
                     <div>
                         <Text ta="center" fz="md" className={classes.label}>
-                            {count == "Infinity" ? "" : count} {accuracy ? "%" : "WPM"}
+                            {count == "Infinity" ? "" : count} {label === "accuracy" && "%"}
+                        </Text>
+                        <Text ta="center" fz="xs" color="gray">
+                            {label}
                         </Text>
                     </div>
                 }

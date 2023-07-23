@@ -18,10 +18,8 @@ import JoinLobby from "./Components/Multiplayer/JoinLobby/JoinLobby";
 import UserInfo from "./Components/UserInfo/UserInfo";
 import Lobby from "./Components/Lobby/Lobby";
 import Profile from "./Components/Profile/Profile";
-import LobbyUI from "./Components/Lobby/LobbyUI";
 import Multiplayer from "./Components/Multiplayer/Multiplayer";
-import NavBar from "./Components/NavBar/NavBar";
-import ColorSwitch from "./ColorSwitch";
+
 
 function Root() {
 
@@ -33,7 +31,10 @@ function Root() {
     }
 
 
+
+
   }, []);
+
 
 
 
@@ -55,17 +56,15 @@ function App() {
         <Route path="userInfo" element={<UserInfo />} />
         <Route path="practice" element={<Practice />} />
         <Route path="leaderboard" element={<LeaderBoard />} />
-        {/* <Route path="lobby" element={<Lobby />} /> */}
         <Route path="lobby" element={<Multiplayer />} />
         <Route path="createlobby" element={<CreateLobby />} />
         <Route path="joinlobby" element={<JoinLobby />} />
         <Route path='lobby/:lobbyCode' element={<Lobby />} />
-        {/* <Route path="lobbyui" element={<LobbyUI />} /> */}
         <Route path='profile' element={<Profile />} />
         <Route path="*" element={<h1>Not Found</h1>} />
-      </Route>
-
-    ));
+      </Route >
+    )
+  );
 
   return (
     <RouterProvider router={router} >

@@ -1,3 +1,7 @@
+* {
+  font-family: 'Ubuntu Mono !important';
+}
+
 #game_words {
   display: inline;
 }
@@ -63,4 +67,11 @@
 .short {
   width: 80%;
   margin: auto;
+}
+
+.link {
+  text-decoration: none;
+  /* color: black; */
+  /* color: lightblue; */
+  color: #1c7ed6;
 }
