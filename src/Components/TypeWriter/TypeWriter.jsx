@@ -1,4 +1,4 @@
-import { Button, Container, Flex, Text } from "@mantine/core";
+import { Button, Container, Flex, ScrollArea, Text } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 import NavBar from "../NavBar/NavBar";
 
@@ -14,7 +14,6 @@ const TypeWriter = ({ doneWords, pendingWords, handleKeyDown, handleReset, short
 
     return (
         <>
-
             <div
                 className={`${short ? 'short' : ''}`}
                 ref={gameInput} tabIndex="0" onBlur={() => gameInput.current?.focus()} id="game_words"

@@ -3,9 +3,6 @@ import { Flex, SegmentedControl, Tooltip } from "@mantine/core";
 const Timing = ({ startTime, setStartTime, setTime, center = true }) => {
     return (
         <>
-
-            {console.log(startTime)}
-            {console.log(startTime.toString())}
             <Flex justify={'center'} w={center ? '30vw' : '100%'}>
                 <Tooltip label="time">
                     <SegmentedControl

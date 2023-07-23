@@ -8,8 +8,9 @@ const JoinLobby = () => {
 
     const isLoggedIn = sessionStorage.getItem('isLoggedIn');
 
-    const [username, setUsername] = useState(isLoggedIn === 'true' ? sessionStorage.getItem('username') : '');
+    const [username, setUsername] = useState(isLoggedIn === 'true' ? sessionStorage.getItem('username') : "");
     const [lobbyCode, setLobbyCode] = useState("");
+    const [error, setError] = useState("");
 
     const naviagte = useNavigate();
 
@@ -37,7 +38,8 @@ const JoinLobby = () => {
             }
         }
         catch (error) {
-            console.log(error.message, "error");
+            setError(error.message);
+            // console.log(error.message, "error");
         }
     }
 
@@ -65,11 +67,13 @@ const JoinLobby = () => {
                 value={lobbyCode}
                 onChange={(e) => setLobbyCode(e.target.value)}
             />
+            {error && <Box mt="sm" style={{ color: 'red' }}>{error}</Box>}
 
 
             <Group position="right" mt="md">
                 <Button onClick={handleSubmit}>Join Lobby</Button>
             </Group>
+            {console.log(username.length)}
         </Flex >
     );
 }

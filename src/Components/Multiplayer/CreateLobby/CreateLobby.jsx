@@ -45,6 +45,7 @@ const CreateLobby = () => {
 
   return (
     <>
+      {/* <Flex justify={'center'} h={'100vh'} w={'500px'}> */}
       <Tooltip label="Username can't be changed" disabled={!(isLoggedIn === 'true')}>
         <Flex maw={300} mx="auto" direction={'column'} justify={'center'}>
           <TextInput
@@ -69,6 +70,7 @@ const CreateLobby = () => {
           </Flex>
         </Flex >
       </Tooltip>
+      {/* </Flex> */}
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { Anchor, Box, Button, Center, Flex, Group, SegmentedControl, Tooltip } from "@mantine/core";
+import { Anchor, Box, Button, Center, Flex, Group, ScrollArea, SegmentedControl, Tooltip } from "@mantine/core";
 import TypeWriter from "../TypeWriter/TypeWriter";
 import NavBar from "../NavBar/NavBar";
 import { IconClockHour3, IconHash, IconKeyboard } from "@tabler/icons-react";
@@ -61,15 +61,16 @@ const Practice = ({ }) => {
 
     const fetchParagraph = async () => {
         const mode = modes[difficulty];
-        console.log(mode);
         const url = `${process.env.REACT_APP_BACKEND_URL}/paragraph/${mode}/`;
         const res = await fetch(url);
         const data = await res.json();
-        setPendingWords(data['data']);
+        setPendingWords(prev => {
+            if (prev.length < 10) return prev + " " + data.data;
+            return data.data;
+        });
     }
     const sendStats = async () => {
         const url = `${process.env.REACT_APP_BACKEND_URL}/score/newScore`;
-        console.log(startTime);
         const res = await fetch(url, {
             method: 'POST',
             headers: {
@@ -83,17 +84,13 @@ const Practice = ({ }) => {
                 'time': startTime,
             })
         });
-
-        const data = await res.json();
-
-        console.log(data);
     }
 
     useEffect(() => {
         fetchParagraph();
     }, [difficulty, resetPragraph]);
 
-    console.log(time, status, stats, grossWPM, netWPM, accuracy);
+
 
     const handleTypingEnd = async () => {
         setStatus('stop');
@@ -146,6 +143,7 @@ const Practice = ({ }) => {
 
     }, [time, status]);
 
+
     const handleKeyDown = (e) => {
 
 
@@ -157,8 +155,6 @@ const Practice = ({ }) => {
 
                     if (status === 'wait') setStatus('start');
                     let newStats = { ...stats };
-
-                    console.log(e.key, pendingWords[0]);
 
                     if (pendingWords[0] === e.key) {
 
@@ -179,6 +175,9 @@ const Practice = ({ }) => {
                         setPendingWords(newVal);
                     }
                     setStats(newStats);
+                    if (pendingWords.length === 10) {
+                        setResetPragraph(!resetPragraph);
+                    }
                 }
             }
         } else {
@@ -189,13 +188,14 @@ const Practice = ({ }) => {
                 setDoneWords(doneWords.slice(0, -1));
             }
             setStats(newStats);
+            if (pendingWords.length === 10) {
+                setResetPragraph(!resetPragraph);
+            }
         }
     }
 
     const handleReset = () => {
         setDoneWords([])
-        // setPendingWords("")
-        // setDiffculty(difficulty)
         setResetPragraph(!resetPragraph);
         setStatus('wait')
         setStats({ inputChars: 0, goodChars: 0 })
@@ -207,7 +207,6 @@ const Practice = ({ }) => {
 
 
     const calulateGrossWPM = () => {
-        // console.log(stats.inputChars, startTime);
         return (60 * (stats.inputChars) / (5 * startTime)).toFixed(2);
     }
 
@@ -223,7 +222,6 @@ const Practice = ({ }) => {
 
 
     const calcAccuracy = () => {
-        // return ((calulateNetWPM() / calulateGrossWPM()) * 100).toFixed(0);
         let uncorrectedErrors = 0;
         doneWords && doneWords.forEach((letter) => {
             if (!letter.correct) uncorrectedErrors++;
@@ -307,19 +305,22 @@ const Practice = ({ }) => {
                     <Flex justify={'space-between'}>
                         {status === "start" && <RunningMeter count={time} label={'Time Left'} />}
                         <Group>
-
                             {status === "start" && <RunningMeter count={runningGrossWPM} label={'Gross WPM'} />}
                             {status === "start" && <RunningMeter count={runningNetWPM} label={'Net WPM'} />}
                             {status === "start" && <RunningMeter count={runningAccuracy} label={'Accuracy'} />}
                         </Group>
 
                     </Flex>
-                    {(pendingWords?.length > 0) && (status === "wait" || status === "start") && <TypeWriter
-                        doneWords={doneWords}
-                        pendingWords={pendingWords}
-                        handleKeyDown={handleKeyDown}
-                        handleReset={handleReset}
-                    />}
+                    {/* <Flex> */}
+                    <ScrollArea h={'280px'}>
+                        {(pendingWords?.length > 0) && (status === "wait" || status === "start") && <TypeWriter
+                            doneWords={doneWords}
+                            pendingWords={pendingWords}
+                            handleKeyDown={handleKeyDown}
+                            handleReset={handleReset}
+                        />}
+                    </ScrollArea>
+                    {/* </Flex> */}
                 </Flex>
                 <Flex justify={'center'} w="80vw" align={'center'} >
                     {status === 'wait' && <Difficulty difficulty={difficulty} setDiffculty={setDiffculty} />}

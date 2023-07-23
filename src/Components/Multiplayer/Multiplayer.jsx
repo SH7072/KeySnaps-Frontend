@@ -75,8 +75,7 @@ const Multiplayer = () => {
             <div className={classes.main_container}>
                 <Flex className={classes.container1}>
                     <Flex className={classes.text_c}>
-
-                        <Text>
+                        <Text sx={{ fontFamily: 'Ubuntu Mono', fontSize: '1.5rem' }} >
                             With every keysnap, the symphony of words comes alive. Embrace the rhythm of typing, where each stroke is a note in the masterpiece of your expression.
                         </Text>
                     </Flex>
@@ -93,9 +92,11 @@ const Multiplayer = () => {
                     </Flex>
                 </Flex>
 
-                <Flex className={classes.container2} justify={'space-around'}>
+                <Flex w={0} sx={{ border: '2px solid #e9ecef' }}></Flex>
+
+                <Flex className={classes.container2} justify={'space-around'} direction={'column'} align={'center'}>
                     <Flex align={'center'}>
-                        <Title>Public Lobby Code To Join</Title>
+                        <Title sx={{ fontFamily: 'Ubuntu Mono' }}>Public Lobbies To Join</Title>
                     </Flex>
                     <LobbyTable />
                 </Flex>

@@ -13,9 +13,6 @@ const useStyles = createStyles((theme) => ({
 const RunningMeter = ({ count, label, ...props }) => {
 
     const { classes, theme } = useStyles();
-
-    console.log(count);
-
     return (
         <>
             <RingProgress

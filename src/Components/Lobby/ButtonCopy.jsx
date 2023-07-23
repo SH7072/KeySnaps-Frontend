@@ -12,6 +12,7 @@ export function ButtonCopy({ lobbyCode }) {
             radius="xl"
             transitionProps={{ duration: 100, transition: 'slide-down' }}
             opened={clipboard.copied}
+
         >
             <Button
                 variant="subtle"
@@ -29,6 +30,7 @@ export function ButtonCopy({ lobbyCode }) {
                     rightIcon: { marginLeft: rem(22) },
                 }}
                 onClick={() => clipboard.copy(lobbyCode)}
+
             >
                 {lobbyCode}
             </Button>

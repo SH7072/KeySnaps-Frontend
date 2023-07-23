@@ -26,14 +26,9 @@ function Root() {
   useEffect(() => {
 
     const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-    console.log(typeof (isLoggedIn));
     if (isLoggedIn === null || isLoggedIn === false) {
       sessionStorage.setItem('isLoggedIn', false);
     }
-
-
-
-
   }, []);
 
 
@@ -73,7 +68,7 @@ function App() {
         withGlobalStyles
         withNormalizeCSS
         theme={{
-          colorScheme: 'light',
+          colorScheme: 'light' | 'dark',
           colors: {
             primarybrand: ['#02d96e'],
             secondaryBrand: ['#cce5ff'],
