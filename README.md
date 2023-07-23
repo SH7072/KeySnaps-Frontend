@@ -6,7 +6,7 @@
 
 ### Server
 
-* GIT clone the server repo from : ```https://github.com/SH7072/telly-Backend`` 
+* GIT clone the server repo from : https://github.com/SH7072/telly-Backend
 
 * To install the dependencies run : ```npm i``` 
 
@@ -18,7 +18,7 @@
 
 ### Client
 
-* GIT clone the repo from : ```https://github.com/SH7072/telly-Frontend```
+* GIT clone the repo from : https://github.com/SH7072/telly-Frontend
 
 * To install the dependencies run : ```npm i```
 
