@@ -1,7 +1,7 @@
 import { createStyles, Flex, Avatar } from "@mantine/core";
 
 import React from 'react'
-
+import Cards from "./Cards"
 
 const useStyles = createStyles((theme) => ({
     announced_card_container: {
@@ -21,42 +21,56 @@ const useStyles = createStyles((theme) => ({
         marginTop: "1rem",
     },
     profile_picture: {
-        width: "10%",
+        width: "35%",
+        display:"flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "3rem",
-    },
-    profile_name: {
-        width: "40%",
-
-        height: "3rem",
+        // height: "5rem",
         flexDirection: "column",
-        justifyContent: "center",
+        paddingRight:"0.5rem",
+        paddingLeft:"0.5rem",
+    
+
     },
     profile_test: {
-        width: "30%",
-        height: "3rem",
+        width: "35%",
+        // height: "3rem",
+        display:"flex",
+        justifyContent: "center",
+        alignItems: "center",
         flexDirection: "column",
-        justify: "center",
+        
+        paddingRight:"0.5rem",
+
     },
     profile_time: {
-        width: "20%",
-        height: "3rem",
+        width: "35%",
+        // height: "3rem",
         flexDirection: "column",
         justifyContent: "center",
+        paddingRight:"0.5rem",
+        
     },
     announced_section_2: {
         width: '100%',
         marginTop: "1rem",
         marginLeft: "1rem",
+        padding:"0.5rem",
+        justifyContent:"space-around"
+        
     },
     profile_averageScore: {
-        width: "59%",
-        flexDirection: "column"
+        width: "35%",
+        flexDirection: "column",
+        alignItems:"center",
+        // paddingRight:"1.5rem",
     },
     profile_overallScore: {
-        width: "50%",
-        flexDirection: "column"
+        width: "35%",
+        flexDirection: "column",
+        alignItems:"center",
+        justifyContent:"center",
+        // paddingRight:"0.5rem",
     },
 
 }));
@@ -83,23 +97,48 @@ const User = ({ data }) => {
 
             <Flex className={classes.announced_card_container}>
                 <Flex className={classes.announced_section_1}>
-                    <Flex className={classes.profile_picture}><Avatar size={"2.5rem"}></Avatar></Flex>
-                    <Flex className={classes.profile_name}>
-                        <p>{data.username}</p>
+                    <Flex className={classes.profile_picture}>
+
+                        <Cards label={data.username}
+                            // progress={100}
+                            icon={"user"}
+                        />
+
                     </Flex>
                     <Flex className={classes.profile_test}>
-                        <p>Test : {totalTest}</p>
+                        {/* <p>Test : {totalTest}</p> */}
+                        <Cards label={"Total Tests"}
+                            // progress={100}
+                            icon={"down"}
+                            countUpRef={totalTest}
+                        />
                     </Flex>
                     <Flex className={classes.profile_time}>
-                        <p>Total Time: {timeString} </p>
+                        
+                        <Cards label={"Total Time"}
+                            // progress={100}
+                            icon={"time"}
+                            countUpRef={timeString}
+                        />
+
                     </Flex>
                 </Flex>
                 <Flex className={classes.announced_section_2}>
                     <Flex className={classes.profile_averageScore}>
-                        <p>Average Speed: {speed} wpm</p>
+                    <Cards label={"Average Speed"}
+                            // progress={100}
+                            icon={"speed"}
+                            countUpRef={speed}
+                        />
+                        {/* <p>Average Speed: {speed} wpm</p> */}
                     </Flex>
                     <Flex className={classes.profile_overallScore}>
-                        <p>Overall Accuracy: {Accuracy} %</p>
+                    <Cards label={"Overall Accuracy"}
+                            // progress={100}
+                            icon={"accuracy"}
+                            countUpRef={Accuracy}
+                        />
+                        {/* <p>Overall Accuracy: {Accuracy} %</p> */}
                     </Flex>
                 </Flex>
             </Flex>

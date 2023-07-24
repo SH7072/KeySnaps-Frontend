@@ -8,6 +8,7 @@ import { H1 } from 'tabler-icons-react';
 import NavBar from '../NavBar/NavBar';
 
 
+
 const useStyles = createStyles((theme) => ({
     main_container: {
         display: "flex",
@@ -77,8 +78,7 @@ const Profile = () => {
             <>
                 <NavBar />
                 <div className={classes.main_container}>
-                    {console.log(isLoggedIn)}
-                    {console.log(isLoggedIn === "true")}
+                 
                     {data && <User data={data} />}
                     {scores.length > 0 && <History scores={scores} />}
                 </div>

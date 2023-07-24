@@ -38,10 +38,10 @@ const Practice = ({ }) => {
 
 
     const [startTime, setStartTime] = useState(30);
-    const [difficulty, setDiffculty] = useState('easy');
+    const [difficulty, setDifficulty] = useState('easy');
     const [doneWords, setDoneWords] = useState([]);
     const [pendingWords, setPendingWords] = useState("");
-    const [resetPragraph, setResetPragraph] = useState(false);
+    const [resetParagraph, setResetParagraph] = useState(false);
     const [status, setStatus] = useState('wait');
     const [stats, setStats] = useState({ inputChars: 0, goodChars: 0 });
     const [time, setTime] = useState(startTime);
@@ -88,7 +88,7 @@ const Practice = ({ }) => {
 
     useEffect(() => {
         fetchParagraph();
-    }, [difficulty, resetPragraph]);
+    }, [difficulty, resetParagraph]);
 
 
 
@@ -129,10 +129,10 @@ const Practice = ({ }) => {
         const timerId = time > 0 && status === 'start' && setInterval(() => {
             setTime(time - 1);
             setAccuracy(calcAccuracy());
-            setGrossWPM(calulateGrossWPM());
-            setNetWPM(calulateNetWPM());
+            setGrossWPM(calculateGrossWPM());
+            setNetWPM(calculateNetWPM());
             setRunningAccuracy(calcAccuracy2());
-            setRunningGrossWPM(calulateRelativeGrossWPM());
+            setRunningGrossWPM(calculateRelativeGrossWPM());
             setRunningNetWPM(calculateRelativeNetWPM());
         }, 1000);
         const timerId2 = time === 0 && status === 'start' && handleTypingEnd();
@@ -176,7 +176,7 @@ const Practice = ({ }) => {
                     }
                     setStats(newStats);
                     if (pendingWords.length === 10) {
-                        setResetPragraph(!resetPragraph);
+                        setResetParagraph(!resetParagraph);
                     }
                 }
             }
@@ -189,14 +189,14 @@ const Practice = ({ }) => {
             }
             setStats(newStats);
             if (pendingWords.length === 10) {
-                setResetPragraph(!resetPragraph);
+                setResetParagraph(!resetParagraph);
             }
         }
     }
 
     const handleReset = () => {
         setDoneWords([])
-        setResetPragraph(!resetPragraph);
+        setResetParagraph(!resetParagraph);
         setStatus('wait')
         setStats({ inputChars: 0, goodChars: 0 })
         setTime(startTime)
@@ -206,11 +206,11 @@ const Practice = ({ }) => {
     }
 
 
-    const calulateGrossWPM = () => {
+    const calculateGrossWPM = () => {
         return (60 * (stats.inputChars) / (5 * startTime)).toFixed(2);
     }
 
-    const calulateNetWPM = () => {
+    const calculateNetWPM = () => {
         let uncorrectedErrors = 0;
         doneWords && doneWords.forEach((letter) => {
             if (!letter.correct) uncorrectedErrors++;
@@ -230,7 +230,7 @@ const Practice = ({ }) => {
         return (((stats.inputChars - uncorrectedErrors) / stats.inputChars) * 100).toFixed(0);
     }
 
-    const calulateRelativeGrossWPM = () => {
+    const calculateRelativeGrossWPM = () => {
         if (startTime - time === 0) return 0;
         return (60 * (stats.inputChars) / (5 * (startTime - time))).toFixed(2);
     }
@@ -323,7 +323,7 @@ const Practice = ({ }) => {
                     {/* </Flex> */}
                 </Flex>
                 <Flex justify={'center'} w="80vw" align={'center'} >
-                    {status === 'wait' && <Difficulty difficulty={difficulty} setDiffculty={setDiffculty} />}
+                    {status === 'wait' && <Difficulty difficulty={difficulty} setDifficulty={setDifficulty} />}
 
                     <Tooltip label="reset">
                         <IconKeyboard size={"100px"} onClick={handleReset} />
