@@ -35,11 +35,12 @@ const Home = () => {
     const isLoggedIn = sessionStorage.getItem('isLoggedIn');
 
     const { classes } = useStyles();
-    const naviagte = useNavigate();
+    const navigate = useNavigate();
 
     const handleLogout = () => {
-        console.log('sjdius');
+        
         sessionStorage.clear();
+        navigate('/logout')
     }
     console.log(isLoggedIn);
     console.log(typeof isLoggedIn);
@@ -48,25 +49,25 @@ const Home = () => {
         <>
             <Flex h={'100vh'} w={'100vw'} mt={'50px'}>
                 <Flex direction={'column'} w={'50%'} ml={'25vw'} pt={"200px"}>
-                    <Flex size={'2rem'} onClick={() => naviagte('/userInfo')}>
+                    <Flex size={'2rem'} onClick={() => navigate('/userInfo')}>
                         <Text sx={classes.text} >
                             Practice
                         </Text>
                         <IconKeyboard size={'2rem'} />
                     </Flex>
-                    <Flex size={'2rem'} onClick={() => naviagte('/lobby')}>
+                    <Flex size={'2rem'} onClick={() => navigate('/lobby')}>
                         <Text sx={classes.text}>
                             MultiPlayer Typing Race
                         </Text>
                         <IconDeviceGamepad2 />
                     </Flex>
-                    <Flex size={'2rem'} onClick={() => naviagte('/leaderboard')}>
+                    <Flex size={'2rem'} onClick={() => navigate('/leaderboard')}>
                         <Text sx={classes.text}>
                             LeaderBoard
                         </Text>
                         <IconListNumbers />
                     </Flex>
-                    <Flex size={'2rem'} onClick={() => naviagte('/profile')}>
+                    <Flex size={'2rem'} onClick={() => navigate('/profile')}>
                         <Text sx={classes.text}>
                             Profile
                         </Text>
@@ -75,13 +76,13 @@ const Home = () => {
                     {
                         (isLoggedIn === 'false' || isLoggedIn === null) ? (
                             <>
-                                <Flex size={'2rem'} onClick={() => naviagte('/login')}>
+                                <Flex size={'2rem'} onClick={() => navigate('/login')}>
                                     <Text sx={classes.text}>
                                         Login
                                     </Text>
                                     <IconLogin />
                                 </Flex>
-                                <Flex size={'2rem'} onClick={() => naviagte('/register')}>
+                                <Flex size={'2rem'} onClick={() => navigate('/register')}>
                                     <Text sx={classes.text}>
                                         Register
                                     </Text>

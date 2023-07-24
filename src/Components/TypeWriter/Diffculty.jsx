@@ -1,6 +1,6 @@
 import { Flex, SegmentedControl, Tooltip } from "@mantine/core";
 
-const Difficulty = ({ difficulty, setDiffculty, center = true }) => {
+const Difficulty = ({ difficulty, setDifficulty, center = true }) => {
     return (
         <>
             <Flex justify={'center'} w={center ? '30vw' : '100%'} >
@@ -9,7 +9,7 @@ const Difficulty = ({ difficulty, setDiffculty, center = true }) => {
                         defaultValue="easy"
                         radius={8}
                         value={difficulty}
-                        onChange={setDiffculty}
+                        onChange={setDifficulty}
                         data={[
                             { label: 'Hard', value: 'hard' },
                             { label: 'Medium', value: 'medium' },

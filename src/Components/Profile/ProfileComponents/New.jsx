@@ -1,7 +1,6 @@
 import { createStyles, Flex, Avatar } from "@mantine/core";
-
-
-import React from 'react'
+import React from 'react';
+import Cards from "./Cards";
 
 
 const useStyles = createStyles((theme) => ({
@@ -20,44 +19,59 @@ const useStyles = createStyles((theme) => ({
     announced_section_1: {
         width: '100%',
         marginTop: "1rem",
+        paddingLeft:"0.5rem",
     },
     profile_picture: {
-        width: "10%",
+        width: "35%",
+        display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "3rem",
-    },
-    profile_name: {
-        width: "40%",
-
-        height: "3rem",
+        // height: "5rem",
         flexDirection: "column",
-        justifyContent: "center",
+        paddingLeft: "0.5rem",
+        paddingRight: "0.5rem",
+
+
     },
     profile_test: {
-        width: "30%",
-        height: "3rem",
-        flexDirection: "column",
+        width: "35%",
+        // height: "3rem",
+        display: "flex",
         justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+        paddingLeft:"0.5rem",
+        paddingRight: "0.5rem",
+
     },
     profile_time: {
-        width: "20%",
-        height: "3rem",
+        width: "35%",
+        // height: "3rem",
         flexDirection: "column",
         justifyContent: "center",
+        paddingRight: "0.5rem",
+
     },
     announced_section_2: {
         width: '100%',
         marginTop: "1rem",
         marginLeft: "1rem",
+        paddingBottom: "0.5rem",
+        justifyContent: "space-around"
+
     },
     profile_averageScore: {
-        width: "59%",
-        flexDirection: "column"
+        width: "35%",
+        flexDirection: "column",
+        alignItems: "center",
+        // paddingRight:"1.5rem",
     },
     profile_overallScore: {
-        width: "50%",
-        flexDirection: "column"
+        width: "35%",
+        flexDirection: "column",
+        // alignItems: "center",
+        // justifyContent: "center",
+        // paddingRight:"0.5rem",
     },
 
 }));
@@ -67,6 +81,7 @@ const New = ({ username, stats }) => {
     console.log(username);
     console.log(stats);
     const test = stats.length;
+    
 
     const subjectTotals = stats.reduce((acc, subject) => {
         Object.keys(subject).forEach((subjectName) => {
@@ -101,23 +116,47 @@ const New = ({ username, stats }) => {
         <>
             <Flex className={classes.announced_card_container}>
                 <Flex className={classes.announced_section_1}>
-                    <Flex className={classes.profile_picture}><Avatar size={"2.5rem"}></Avatar></Flex>
+
                     <Flex className={classes.profile_name}>
-                        <p>{username} </p>
+                        <Cards label={username}
+                            // progress={100}
+                            icon={"user"}
+                        />
+                        {/* <p>{username} </p> */}
                     </Flex>
                     <Flex className={classes.profile_test}>
-                        <p>Test : {test}</p>
+                        <Cards label={"Total Tests"}
+                            // progress={100}
+                            icon={"down"}
+                            countUpRef={test}
+                        />
+                        {/* <p>Test : {test}</p> */}
                     </Flex>
                     <Flex className={classes.profile_time}>
-                        <p>Total Time: {timeString} </p>
+                        <Cards label={"Total Time"}
+                            // progress={100}
+                            icon={"time"}
+                            countUpRef={timeString}
+                        />
+                        {/* <p>Total Time: {timeString} </p> */}
                     </Flex>
                 </Flex>
                 <Flex className={classes.announced_section_2}>
                     <Flex className={classes.profile_averageScore}>
-                        <p>Average Speed: {averageSpeed} wpm</p>
+                        <Cards label={"Average Speed"}
+                            // progress={100}
+                            icon={"speed"}
+                            countUpRef={averageSpeed}
+                        />
+                        {/* <p>Average Speed: {averageSpeed} wpm</p> */}
                     </Flex>
                     <Flex className={classes.profile_overallScore}>
-                        <p>Overall Accuracy: {overallAccuracy} %</p>
+                        <Cards label={"Overall Accuracy"}
+                            // progress={100}
+                            icon={"accuracy"}
+                            countUpRef={overallAccuracy}
+                        />
+                        {/* <p>Overall Accuracy: {overallAccuracy} %</p> */}
                     </Flex>
                 </Flex>
             </Flex>

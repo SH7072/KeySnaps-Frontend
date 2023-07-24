@@ -324,7 +324,7 @@ const Practice = ({ }) => {
                 </Flex>
                 <Flex justify={'center'} w="80vw" align={'center'} >
                     {status === 'wait' && <Difficulty difficulty={difficulty} setDifficulty={setDifficulty} />}
-
+                    {console.log(difficulty)}
                     <Tooltip label="reset">
                         <IconKeyboard size={"100px"} onClick={handleReset} />
                     </Tooltip>

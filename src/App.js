@@ -3,7 +3,7 @@ import {
   RouterProvider,
   Route,
   createRoutesFromElements,
-  Outlet,
+  Outlet,useNavigate
 } from "react-router-dom";
 import React, { useEffect } from 'react';
 import './App.css';
@@ -19,7 +19,25 @@ import UserInfo from "./Components/UserInfo/UserInfo";
 import Lobby from "./Components/Lobby/Lobby";
 import Profile from "./Components/Profile/Profile";
 import Multiplayer from "./Components/Multiplayer/Multiplayer";
+// import { Logout } from "tabler-icons-react";
 
+function Logout() {
+  const navigate = useNavigate();
+    const handleLogout = () => {
+        
+        sessionStorage.clear();
+        navigate('/home')
+    }
+    useEffect(()=>{handleLogout()},[])
+  return (
+
+    <>
+
+      <Outlet />
+    </>
+  )
+
+}
 
 function Root() {
 
@@ -57,6 +75,8 @@ function App() {
         <Route path="joinlobby" element={<JoinLobby />} />
         <Route path='lobby/:lobbyCode' element={<Lobby />} />
         <Route path='profile' element={<Profile />} />
+        <Route path='logout' element={<Logout />} />
+
         <Route path="*" element={<h1>Not Found</h1>} />
       </Route >
     )

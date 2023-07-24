@@ -36,7 +36,11 @@ import { Link, useNavigate } from 'react-router-dom';
 const NavBar = () => {
 
     const navigate = useNavigate();
-
+    const handleLogout = () => {
+        
+        sessionStorage.clear();
+        navigate('/logout')
+    }
     return (
         <>
             <Flex justify={'space-between'} p={'10px'}>
@@ -47,9 +51,9 @@ const NavBar = () => {
                             <Button variant="subtle"><IconUser /></Button>
                         </Menu.Target>
                         <Menu.Dropdown>
-                            <Menu.Item>Profile</Menu.Item>
-                            <Menu.Item>Settings</Menu.Item>
-                            <Menu.Item>Logout</Menu.Item>
+                            <Menu.Item onClick={() => navigate('/profile')}>Profile</Menu.Item>
+                            {/* <Menu.Item>Settings</Menu.Item> */}
+                            <Menu.Item onClick={handleLogout} >Logout</Menu.Item>
                         </Menu.Dropdown>
                     </Menu>
                 </Group>
