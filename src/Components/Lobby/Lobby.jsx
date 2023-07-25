@@ -77,7 +77,7 @@ const Lobby = () => {
     const [announcements, setAnnouncements] = useState([]);
     const [lobbyInfo, setLobbyInfo] = useState({});
     const [startTime, setStartTime] = useState(30);
-    const [difficulty, setDiffculty] = useState('easy');
+    const [difficulty, setDifficulty] = useState('easy');
     const [doneWords, setDoneWords] = useState([]);
     const [pendingWords, setPendingWords] = useState("");
     const [status, setStatus] = useState('wait');
@@ -149,7 +149,7 @@ const Lobby = () => {
             setWaitTime(data.waitTime);
             setTime(data.startTime);
             setPendingWords(data.paragraph);
-            setDiffculty(data.difficulty);
+            setDifficulty(data.difficulty);
             setFinalStats([]);
             setPlayersStats([]);
             setStatus('ready');
@@ -172,8 +172,8 @@ const Lobby = () => {
         const timerId = time > 0 && status === 'start' && setInterval(() => {
             setTime(time - 1);
             setAccuracy(calcAccuracy());
-            setGrossWPM(calulateGrossWPM());
-            setNetWPM(calulateNetWPM());
+            setGrossWPM(calculateGrossWPM());
+            setNetWPM(calculateNetWPM());
             sendProgressReport();
         }, 1000);
         const timerId2 = time === 0 && status === 'start' && handleTypingEnd();
@@ -238,7 +238,7 @@ const Lobby = () => {
     const handleReset = () => {
         setDoneWords([])
         setPendingWords("")
-        setDiffculty(difficulty)
+        setDifficulty(difficulty)
         setStatus('wait')
         setStats({ inputChars: 0, goodChars: 0, totalChars: 0 })
         setTime(startTime)
@@ -274,11 +274,11 @@ const Lobby = () => {
         socket.emit('player-progress-info', { lobbyCode, userid: multiPlayerUserid, username: multiPlayerUsername, stats: { grossWPM, netWPM, accuracy, inputChars, totalChars, goodChars } });
     }
 
-    const calulateGrossWPM = () => {
+    const calculateGrossWPM = () => {
         return (60 * (stats.inputChars) / (5 * startTime)).toFixed(2);
     }
 
-    const calulateNetWPM = () => {
+    const calculateNetWPM = () => {
         let uncorrectedErrors = 0;
         doneWords && doneWords.forEach((letter) => {
             if (!letter.correct) uncorrectedErrors++;
@@ -375,7 +375,7 @@ const Lobby = () => {
                             {status === "start" && <Timer count={time} maxCount={startTime} />}
                             {status === "ready" && <Timer count={waitTime} maxCount={5} />}
                         </Flex>}
-                    {multiPlayerUserid === lobbyInfo.ownerId && status == 'wait' && <Difficulty difficulty={difficulty} setDiffculty={setDiffculty} center={false} />}
+                    {multiPlayerUserid === lobbyInfo.ownerId && status == 'wait' && <Difficulty difficulty={difficulty} setDifficulty={setDifficulty} center={false} />}
                     {multiPlayerUserid === lobbyInfo.ownerId && status === 'wait' && <Timing startTime={startTime} setStartTime={setStartTime} setTime={setTime} center={false} />}
                     {status === 'wait' && <Flex justify={'center'} align={'center'} direction={'column'} gap={'5px'}>
                         <ButtonCopy lobbyCode={lobbyCode} />

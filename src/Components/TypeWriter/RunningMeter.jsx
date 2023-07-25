@@ -24,7 +24,7 @@ const RunningMeter = ({ count, label, ...props }) => {
                 label={
                     <div>
                         <Text ta="center" fz="md" className={classes.label}>
-                            {count == "Infinity" ? "" : count} {label === "accuracy" && "%"}
+                            {count == "Infinity" ? "" : count} {label === "Accuracy" ? "%": ""}
                         </Text>
                         <Text ta="center" fz="xs" color="gray">
                             {label}
