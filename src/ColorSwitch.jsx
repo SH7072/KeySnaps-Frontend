@@ -1,4 +1,3 @@
-
 import { ActionIcon, useMantineColorScheme } from '@mantine/core';
 import { IconSun, IconMoonStars } from '@tabler/icons-react';
 
@@ -6,10 +5,11 @@ import { IconSun, IconMoonStars } from '@tabler/icons-react';
 const ColorSwitch = () => {
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
     const dark = colorScheme === 'dark';
+    console.log(colorScheme);
     return (
         <ActionIcon
             variant="outline"
-            color={dark ? 'yellow' : 'blue'}
+            color={'violet'}
             onClick={() => toggleColorScheme()}
             title="Toggle color scheme"
         >
@@ -18,4 +18,4 @@ const ColorSwitch = () => {
     );
 }
 
-export default ColorSwitch
+export default ColorSwitch;

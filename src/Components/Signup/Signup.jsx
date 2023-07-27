@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Checkbox, Flex, Input, MediaQuery, Paper, PasswordInput, Text, Title, createStyles } from '@mantine/core';
+import { ActionIcon, Button, Checkbox, Flex, Input, Paper, PasswordInput, Text, Title, createStyles } from '@mantine/core';
 import { IconAt, IconBrandFacebook, IconBrandGoogle, IconBrandTwitter } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import PasswordInputCustom from './PasswordInputCustom';
@@ -9,7 +9,7 @@ const useStyles = createStyles((theme) => ({
     body: {
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         height: '100vh',
         width: '100vw',
         justifyContent: "center",
@@ -30,8 +30,6 @@ const useStyles = createStyles((theme) => ({
         position: 'absolute',
         top: '1rem',
         left: '1rem',
-
-        fontFamily: 'ubuntu mono',
         // fontSize: '3rem',
 
         // color: 'black',
@@ -173,16 +171,16 @@ const Signup = () => {
 
                 <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'}  >
                     < Paper p={10} miw={'60%'} maw={'60%'} w={'60%'} shadow="xl" justify="center">
-                        <Title order={1} align={'center'} sx={{ fontFamily: 'Ubuntu Mono' }}>Create an account</Title>
-                        <Text c="dimmed" align={'center'} sx={{ fontFamily: 'Ubuntu Mono' }}>Enter your details below.</Text>
+                        <Title order={1} align={'center'}>Create an account</Title>
+                        <Text c="dimmed" align={'center'}>Enter your details below.</Text>
                         <Flex justify={'center'} align={'center'}>
-                            <ActionIcon variant="outline" color="blue" radius="xl" size="xl" style={{ margin: 'auto' }}>
+                            <ActionIcon variant="outline" radius="xl" size="xl" style={{ margin: 'auto' }}>
                                 <IconBrandGoogle />
                             </ActionIcon>
-                            <ActionIcon variant="outline" color="blue" radius="xl" size="xl" style={{ margin: 'auto' }}>
+                            <ActionIcon variant="outline" radius="xl" size="xl" style={{ margin: 'auto' }}>
                                 <IconBrandFacebook />
                             </ActionIcon>
-                            <ActionIcon variant="outline" color="blue" radius="xl" size="xl" style={{ margin: 'auto' }}>
+                            <ActionIcon variant="outline" radius="xl" size="xl" style={{ margin: 'auto' }}>
                                 <IconBrandTwitter />
                             </ActionIcon>
                         </Flex>
@@ -240,7 +238,7 @@ const Signup = () => {
                                 <Link to="/login" className={classes.link}>
                                     <Text align={'center'} sx={{ fontFamily: 'Ubuntu Mono' }}>Already have an account? Login</Text>
                                 </Link>
-                                <Button color="blue" onClick={handleSubmit}>
+                                <Button onClick={handleSubmit}>
                                     Register
                                 </Button>
                             </Flex>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { createStyles, Flex, Box, Text, Anchor, Button, Title } from "@mantine/core";
+import React from 'react'
+import { createStyles, Flex, Text, Button, Title } from "@mantine/core";
 import NavBar from '../NavBar/NavBar';
 
 import { useNavigate } from 'react-router';
@@ -12,13 +12,13 @@ const useStyles = createStyles((theme) => ({
         display: "flex",
         flexDirection: "row",
         alignSelf: "center",
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
         width: '85vw',
         margin: "0 auto",
         padding: '2rem 1rem 1rem 1rem',
     },
     container1: {
-        backgroundColor: "white",
+        // backgroundColor: "white",
         width: "40%",
         marginRight: "1rem",
         margin: "1rem",
@@ -27,7 +27,7 @@ const useStyles = createStyles((theme) => ({
         flexDirection: "column",
     },
     container2: {
-        backgroundColor: "white",
+        // backgroundColor: "white",
         width: "60%",
         margin: "1rem",
         marginRight: "0rem",
@@ -66,7 +66,7 @@ const useStyles = createStyles((theme) => ({
 
 const Multiplayer = () => {
 
-    const { classes, theme } = useStyles();
+    const { classes } = useStyles();
     const navigate = useNavigate();
 
     return (
@@ -75,7 +75,7 @@ const Multiplayer = () => {
             <div className={classes.main_container}>
                 <Flex className={classes.container1}>
                     <Flex className={classes.text_c}>
-                        <Text sx={{ fontFamily: 'Ubuntu Mono', fontSize: '1.5rem' }} >
+                        <Text sx={{ fontSize: '1.5rem' }} >
                             With every keysnap, the symphony of words comes alive. Embrace the rhythm of typing, where each stroke is a note in the masterpiece of your expression.
                         </Text>
                     </Flex>
@@ -96,7 +96,7 @@ const Multiplayer = () => {
 
                 <Flex className={classes.container2} justify={'space-around'} direction={'column'} align={'center'}>
                     <Flex align={'center'}>
-                        <Title sx={{ fontFamily: 'Ubuntu Mono' }}>Public Lobbies To Join</Title>
+                        <Title>Public Lobbies To Join</Title>
                     </Flex>
                     <LobbyTable />
                 </Flex>

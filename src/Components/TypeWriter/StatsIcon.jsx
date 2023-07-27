@@ -1,4 +1,4 @@
-import { RingProgress, Text, Paper, Center, Group, createStyles } from '@mantine/core';
+import { RingProgress, Text, Paper, Center, createStyles } from '@mantine/core';
 import { IconArrowUpRight, IconArrowDownRight } from '@tabler/icons-react';
 
 const icons = {
@@ -19,8 +19,11 @@ const useStyles = createStyles((theme) => ({
         justify: 'space-between',
         textAlign: 'center',
         borderRadius: theme.radius.md,
+        // borderColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2],
+        // borderColor: theme.colorScheme === 'dark' ? theme.colors.primaryBrand3[3] : theme.colors.gray[2],
         height: "100px",
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+        // backgroundColor: theme.colorScheme === 'dark' ? theme.colors.primaryBrand3[5] : theme.colors.primaryBrand3[8],
         transition: 'box-shadow 150ms ease, transform 100ms ease',
 
         '&:hover': {
@@ -31,7 +34,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-const StatsIcon = ({ label, stats = 0, progress, color = "teal", icon = "up", countUpRef }) => {
+const StatsIcon = ({ label, stats = 0, progress, icon = "up", countUpRef }) => {
 
     const { classes, theme } = useStyles();
     const Icon = icons[icon];
@@ -43,7 +46,7 @@ const StatsIcon = ({ label, stats = 0, progress, color = "teal", icon = "up", co
                     size={80}
                     roundCaps
                     thickness={8}
-                    sections={[{ value: progress, color: color }]}
+                    sections={[{ value: progress, color: theme.primaryColor }]}
                     label={
                         <Center>
                             <Icon size="1.4rem" stroke={1.5} />
@@ -52,7 +55,7 @@ const StatsIcon = ({ label, stats = 0, progress, color = "teal", icon = "up", co
                 />
 
                 <div>
-                    <Text color="dimmed" size="25px" transform="uppercase" weight={700} ff={"robot mono"}>
+                    <Text size="25px" transform="uppercase" weight={700} ff={"robot mono"}>
                         {label}
                     </Text>
                     {/* <Text weight={700} size="xl" ref={countUpRef} /> */}

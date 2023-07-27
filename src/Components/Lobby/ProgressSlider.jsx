@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { createStyles, NumberInput, Slider, rem, Group, Flex } from '@mantine/core';
+import { createStyles, NumberInput, Slider, rem, Flex } from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
     wrapper: {

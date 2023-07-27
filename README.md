@@ -29,3 +29,10 @@
 * Then the website can be accessed using : ```http://localhost:3000/```.
 
 
+### Issues
+
+- [bug] - When user enters practice mode for first time or after refreshing the practice mode page, the first char that comes is space.
+
+
+
+

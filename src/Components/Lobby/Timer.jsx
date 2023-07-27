@@ -1,10 +1,8 @@
 import { RingProgress, Text, createStyles } from "@mantine/core";
-import { useEffect } from "react";
 
 
 const useStyles = createStyles((theme) => ({
     label: {
-        fontFamily: `Greycliff CF, ${theme.fontFamily}`,
         fontWeight: 700,
         lineHeight: 1,
     },

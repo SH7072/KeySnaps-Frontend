@@ -1,9 +1,12 @@
-import { Button, rem, Tooltip } from '@mantine/core';
+import { Button, rem, Tooltip, useMantineTheme } from '@mantine/core';
 import { useClipboard } from '@mantine/hooks';
 import { IconCopy, IconCheck } from '@tabler/icons-react';
 
 export function ButtonCopy({ lobbyCode }) {
     const clipboard = useClipboard();
+
+    const theme = useMantineTheme();
+
     return (
         <Tooltip
             label="Code copied!"
@@ -28,6 +31,9 @@ export function ButtonCopy({ lobbyCode }) {
                 styles={{
                     root: { paddingRight: rem(14), height: rem(48) },
                     rightIcon: { marginLeft: rem(22) },
+                    // '&:hover': {
+                    //     color: theme.colorScheme === 'light' ? 'white' : 'black',
+                    // }
                 }}
                 onClick={() => clipboard.copy(lobbyCode)}
 

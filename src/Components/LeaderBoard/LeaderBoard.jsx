@@ -6,17 +6,17 @@ import NavBar from '../NavBar/NavBar';
 
 const useStyles = createStyles((theme) => ({
   main_container: {
-      display: "flex",
-      flexDirection: "column",
-      alignSelf: "center",
-      backgroundColor: 'white',
-      width: '90vw',
-      margin: "0 auto",
-      padding: '2rem 1rem 1rem 1rem',
+    display: "flex",
+    flexDirection: "column",
+    alignSelf: "center",
+    // backgroundColor: 'white',
+    width: '90vw',
+    margin: "0 auto",
+    padding: '2rem 1rem 1rem 1rem',
   },
 }));
 const LeaderBoard = () => {
-  const { classes, theme } = useStyles();
+  const { classes } = useStyles();
   //should be memoized or stable
   const [data, setData] = useState([]);
 

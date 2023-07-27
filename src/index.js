@@ -1,17 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import Providers from './Providers';
 import App from './App';
-import { MantineProvider } from '@mantine/styles';
-import ColorSwitch from './ColorSwitch';
+
+
+
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
+  <Providers>
+    <App />
+  </Providers>
 
 
-  <App />
- 
   // </React.StrictMode>
 );
 

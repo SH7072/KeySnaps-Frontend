@@ -14,7 +14,7 @@ const useStyles = createStyles((theme) => ({
         display: "flex",
         flexDirection: "column",
         alignSelf: "center",
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
         width: '65vw',
         margin: "0 auto",
         padding: '2rem 1rem 1rem 1rem',
@@ -23,7 +23,7 @@ const useStyles = createStyles((theme) => ({
 
 const Profile = () => {
 
-    const { classes, theme } = useStyles();
+    const { classes } = useStyles();
     const isLoggedIn = sessionStorage.getItem('isLoggedIn');
     if (isLoggedIn == null) {
         sessionStorage.setItem('isLoggedIn', false);
@@ -78,7 +78,7 @@ const Profile = () => {
             <>
                 <NavBar />
                 <div className={classes.main_container}>
-                 
+
                     {data && <User data={data} />}
                     {scores.length > 0 && <History scores={scores} />}
                 </div>

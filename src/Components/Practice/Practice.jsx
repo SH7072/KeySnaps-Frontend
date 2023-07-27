@@ -1,18 +1,14 @@
-import { Anchor, Box, Button, Center, Flex, Group, ScrollArea, SegmentedControl, Tooltip } from "@mantine/core";
+import { Button, Flex, Group, ScrollArea, Tooltip } from "@mantine/core";
 import TypeWriter from "../TypeWriter/TypeWriter";
 import NavBar from "../NavBar/NavBar";
-import { IconClockHour3, IconHash, IconKeyboard } from "@tabler/icons-react";
-import Options from "../Options";
+import { IconKeyboard } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import Timer from "../TypeWriter/Progress";
 import CountUp from 'react-countup';
-import Progress from "../TypeWriter/Progress";
 import StatsIcon from "../TypeWriter/StatsIcon";
 import Timing from "../TypeWriter/Timing";
-import Difficulty from "../TypeWriter/Diffculty";
+import Difficulty from "../TypeWriter/Difficulty";
 import { useNavigate } from "react-router";
 import RunningMeter from "../TypeWriter/RunningMeter";
-import { Link } from "react-router-dom";
 
 
 
@@ -24,17 +20,9 @@ const modes = {
 }
 
 
-const Practice = ({ }) => {
+const Practice = () => {
 
     const username = sessionStorage.getItem('username');
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (username === null) {
-            navigate('/userinfo');
-        }
-    }, []);
-
 
 
     const [startTime, setStartTime] = useState(30);
@@ -43,7 +31,7 @@ const Practice = ({ }) => {
     const [pendingWords, setPendingWords] = useState("");
     const [resetParagraph, setResetParagraph] = useState(false);
     const [status, setStatus] = useState('wait');
-    const [stats, setStats] = useState({ inputChars: 0, goodChars: 0 });
+    const [stats, setStats] = useState({ inputChars: 0, correctChars: 0, incorrectChars: 0 });
     const [time, setTime] = useState(startTime);
     const [grossWPM, setGrossWPM] = useState(0);
     const [netWPM, setNetWPM] = useState(0);
@@ -54,16 +42,19 @@ const Practice = ({ }) => {
     const [runningAccuracy, setRunningAccuracy] = useState(0);
 
 
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn')
-    if (isLoggedIn === null || isLoggedIn === false) {
-        sessionStorage.setItem('isLoggedIn', false);
-    }
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+
+    // console.log(pendingWords);
+    console.log(stats);
+
+
 
     const fetchParagraph = async () => {
         const mode = modes[difficulty];
         const url = `${process.env.REACT_APP_BACKEND_URL}/paragraph/${mode}/`;
         const res = await fetch(url);
         const data = await res.json();
+        console.log(data);
         setPendingWords(prev => {
             if (prev.length < 10) return prev + " " + data.data;
             return data.data;
@@ -159,7 +150,7 @@ const Practice = ({ }) => {
                     if (pendingWords[0] === e.key) {
 
                         newStats.inputChars++;
-                        newStats.goodChars++
+                        newStats.correctChars++;
                         let newVal = pendingWords.substring(1);
                         setPendingWords(newVal);
                         if (e.keyCode === 32) {
@@ -170,6 +161,7 @@ const Practice = ({ }) => {
                         }
                     } else {
                         newStats.inputChars++;
+                        newStats.incorrectChars++;
                         setDoneWords([...doneWords, { letter: pendingWords[0], correct: false }]);
                         let newVal = pendingWords.substring(1);
                         setPendingWords(newVal);
@@ -184,8 +176,14 @@ const Practice = ({ }) => {
             let newStats = { ...stats };
             if (doneWords.length > 0) {
                 newStats.inputChars++;
+                if (doneWords[doneWords.length - 1].correct) {
+                    newStats.correctChars--;
+                } else {
+                    newStats.incorrectChars--;
+                }
                 setPendingWords(doneWords[doneWords.length - 1].letter + pendingWords);
                 setDoneWords(doneWords.slice(0, -1));
+
             }
             setStats(newStats);
             if (pendingWords.length === 10) {
@@ -198,7 +196,7 @@ const Practice = ({ }) => {
         setDoneWords([])
         setResetParagraph(!resetParagraph);
         setStatus('wait')
-        setStats({ inputChars: 0, goodChars: 0 })
+        setStats({ inputChars: 0, correctChars: 0, incorrectChars: 0 })
         setTime(startTime)
         setGrossWPM(0)
         setNetWPM(0)
@@ -311,16 +309,14 @@ const Practice = ({ }) => {
                         </Group>
 
                     </Flex>
-                    {/* <Flex> */}
-                    <ScrollArea h={'280px'}>
+                    <ScrollArea.Autosize h={'280px'} type="never">
                         {(pendingWords?.length > 0) && (status === "wait" || status === "start") && <TypeWriter
                             doneWords={doneWords}
                             pendingWords={pendingWords}
                             handleKeyDown={handleKeyDown}
                             handleReset={handleReset}
                         />}
-                    </ScrollArea>
-                    {/* </Flex> */}
+                    </ScrollArea.Autosize>
                 </Flex>
                 <Flex justify={'center'} w="80vw" align={'center'} >
                     {status === 'wait' && <Difficulty difficulty={difficulty} setDifficulty={setDifficulty} />}

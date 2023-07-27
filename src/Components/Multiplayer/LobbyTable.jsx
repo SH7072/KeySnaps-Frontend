@@ -18,8 +18,7 @@ const useStyles = createStyles((theme) => ({
             left: 0,
             right: 0,
             bottom: 0,
-            borderBottom: `${rem(1)} solid ${theme.colorScheme === 'dark' ? theme.colors.dark[3] : theme.colors.gray[2]
-                }`,
+            borderBottom: `${rem(1)} solid ${theme.colorScheme === 'dark' ? theme.colors.dark[3] : theme.colors.gray[2]}`,
             display: 'flex',
             alignContent: 'center',
 

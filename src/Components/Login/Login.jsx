@@ -7,7 +7,7 @@ const useStyles = createStyles((theme) => ({
     body: {
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         height: '100vh',
         width: '100vw',
         justifyContent: "center",
@@ -27,7 +27,7 @@ const useStyles = createStyles((theme) => ({
         position: 'absolute',
         top: '1rem',
         left: '1rem',
-        fontFamily: 'Ubuntu Mono',
+        // fontFamily: 'Ubuntu Mono',
         // fontSize: '2.5rem',
         // color: 'black',
         // textShadow: '0 0 5px black',
@@ -118,13 +118,13 @@ const Login = () => {
                     <Paper w={'60%'} p={10} shadow="xl">
                         <Title order={1} align={'center'} sx={{ fontFamily: 'Ubuntu Mono' }}>Log In</Title>
                         <Flex justify={'center'} align={'center'} mt={15}>
-                            <ActionIcon variant="outline" color="blue" radius="xl" size="xl" style={{ margin: 'auto' }}>
+                            <ActionIcon variant="outline" radius="xl" size="xl" style={{ margin: 'auto' }}>
                                 <IconBrandGoogle />
                             </ActionIcon>
-                            <ActionIcon variant="outline" color="blue" radius="xl" size="xl" style={{ margin: 'auto' }}>
+                            <ActionIcon variant="outline" radius="xl" size="xl" style={{ margin: 'auto' }}>
                                 <IconBrandFacebook />
                             </ActionIcon>
-                            <ActionIcon variant="outline" color="blue" radius="xl" size="xl" style={{ margin: 'auto' }}>
+                            <ActionIcon variant="outline" radius="xl" size="xl" style={{ margin: 'auto' }}>
                                 <IconBrandTwitter />
                             </ActionIcon>
                         </Flex>
@@ -153,9 +153,9 @@ const Login = () => {
                             />
                             <Flex justify={'space-between'} mt={10}>
                                 <Link to="/register" className={classes.link}>
-                                    <Text align={'center'} sx={{ fontFamily: 'Ubuntu Mono' }}>Don't have an account? Register</Text>
+                                    <Text align={'center'}>Don't have an account? Register</Text>
                                 </Link>
-                                <Button color="blue" onClick={handleSubmit}>
+                                <Button onClick={handleSubmit}>
                                     Login
                                 </Button>
                             </Flex>

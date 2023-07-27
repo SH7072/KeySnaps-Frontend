@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { socket } from "../../socket";
-import { Button, Flex, Paper, ScrollArea, Title, Tooltip, createStyles } from "@mantine/core";
+import { Button, Flex, Title, createStyles } from "@mantine/core";
 import TypeWriter from "../TypeWriter/TypeWriter";
-import Difficulty from "../TypeWriter/Diffculty";
+import Difficulty from "../TypeWriter/Difficulty";
 import Timing from "../TypeWriter/Timing";
-import { IconKeyboard } from "@tabler/icons-react";
-import Progress from "../TypeWriter/Progress";
 import Timer from "./Timer";
-import CountUp from 'react-countup';
-import StatsIcon from "../TypeWriter/StatsIcon";
-import DisplayStats from "./DisplayStats";
 import ProgressSlider from "./ProgressSlider";
 import DisplayResults from "./DisplayResults";
 import { ButtonCopy } from "./ButtonCopy";
@@ -66,7 +61,7 @@ const useStyles = createStyles((theme) => ({
 
 const Lobby = () => {
 
-    const { classes, theme } = useStyles();
+    const { classes } = useStyles();
     const navigate = useNavigate();
 
     const { lobbyCode } = useParams();
@@ -166,7 +161,7 @@ const Lobby = () => {
         }
         socket.connect();
         socket.emit('player-joined', { lobbyCode, userid: multiPlayerUserid, username: multiPlayerUsername });
-    }, []);
+    });
 
     useEffect(() => {
         const timerId = time > 0 && status === 'start' && setInterval(() => {
@@ -375,7 +370,7 @@ const Lobby = () => {
                             {status === "start" && <Timer count={time} maxCount={startTime} />}
                             {status === "ready" && <Timer count={waitTime} maxCount={5} />}
                         </Flex>}
-                    {multiPlayerUserid === lobbyInfo.ownerId && status == 'wait' && <Difficulty difficulty={difficulty} setDifficulty={setDifficulty} center={false} />}
+                    {multiPlayerUserid === lobbyInfo.ownerId && status === 'wait' && <Difficulty difficulty={difficulty} setDifficulty={setDifficulty} center={false} />}
                     {multiPlayerUserid === lobbyInfo.ownerId && status === 'wait' && <Timing startTime={startTime} setStartTime={setStartTime} setTime={setTime} center={false} />}
                     {status === 'wait' && <Flex justify={'center'} align={'center'} direction={'column'} gap={'5px'}>
                         <ButtonCopy lobbyCode={lobbyCode} />

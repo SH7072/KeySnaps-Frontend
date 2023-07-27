@@ -1,7 +1,6 @@
 
-import { TextInput, Checkbox, Button, Group, Box, Tooltip, Flex } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { useEffect, useState } from 'react';
+import { TextInput, Checkbox, Button, Tooltip, Flex } from '@mantine/core';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 const CreateLobby = () => {

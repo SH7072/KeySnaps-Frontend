@@ -1,13 +1,5 @@
 import { Modal } from "@mantine/core";
-import { Avatar, Table, Group, Text, ActionIcon, Menu, ScrollArea } from '@mantine/core';
-import {
-    IconPencil,
-    IconMessages,
-    IconNote,
-    IconReportAnalytics,
-    IconTrash,
-    IconDots,
-} from '@tabler/icons-react';
+import { Table, Group, Text, ScrollArea } from '@mantine/core';
 
 const DisplayResults = ({ opened, handleClose, finalStats }) => {
 
@@ -49,12 +41,6 @@ const DisplayResults = ({ opened, handleClose, finalStats }) => {
                     Accuracy
                 </Text>
             </td>
-            {/* <td>
-                <Text fz="sm">${index} / hr</Text>
-                <Text fz="xs" c="dimmed">
-                    Rank
-                </Text>
-            </td> */}
         </tr>
     ));
 
