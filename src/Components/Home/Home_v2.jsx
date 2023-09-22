@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
     text: {
-        fontSize: '72px',
+        fontSize: '69px',
         fontWeight: 'bold',
         textTransform: 'uppercase',
     },
@@ -27,7 +27,7 @@ const useStyles = createStyles((theme) => ({
         // bottom: '100px'
     },
     fancytexthover: {
-        fontSize: '72px',
+        fontSize: '69px',
         fontWeight: 'bold',
         textTransform: 'uppercase',
         position: 'relative',
@@ -42,7 +42,7 @@ const useStyles = createStyles((theme) => ({
 
     textwrapper: {
         ref: getStylesRef('textwrapper'),
-        fontSize: '72px',
+        fontSize: '69px',
         position: 'absolute',
         display: 'inline-block',
         overflow: 'hidden',
@@ -88,45 +88,7 @@ const Home_v2 = () => {
                 <ColorSwitch />
             </Flex>
             <Flex h={'100vh'} w={'100vw'} align={'center'} wrap={'wrap'}>
-                {/* <Flex direction={'column'} w={'50%'}>
-                    <div className='fancytexthover'>
-                        <span className='textwrapper'>
-                            Practice
-                        </span>
-                        Practice
-                    </div>
-                    <div className='fancytexthover'>
-                        <span className='textwrapper'>
-                            Multiplayer
-                        </span>
-                        Multiplayer
-                    </div>
-                    <div className='fancytexthover'>
-                        <span className='textwrapper'>
-                            LeaderBoard
-                        </span>
-                        LeaderBoard
-                    </div>
-                    <div className='fancytexthover'>
-                        <span className='textwrapper'>
-                            Profile
-                        </span>
-                        Profile
-                    </div>
-                    <div className='fancytexthover'>
-                        <span className='textwrapper'>
-                            Login
-                        </span>
-                        Login
-                    </div>
-                    <div className='fancytexthover'>
-                        <span className='textwrapper'>
-                            Register
-                        </span>
-                        Register
-                    </div>
-                </Flex> */}
-                <Flex direction={'column'} w={'50%'}>
+                <Flex direction={'column'} w={'50%'} pl='1rem'>
                     <Flex className={classes.fancytexthover} onClick={() => navigate('/userInfo')}>
                         <Text className={classes.textwrapper}>
                             Practice

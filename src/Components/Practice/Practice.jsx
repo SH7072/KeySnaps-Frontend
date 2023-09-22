@@ -1,4 +1,4 @@
-import { Button, Flex, Group, ScrollArea, Tooltip } from "@mantine/core";
+import { Button, Flex, Group, ScrollArea, Tooltip, createStyles } from "@mantine/core";
 import TypeWriter from "../TypeWriter/TypeWriter";
 import NavBar from "../NavBar/NavBar";
 import { IconKeyboard } from "@tabler/icons-react";
@@ -10,6 +10,22 @@ import Difficulty from "../TypeWriter/Difficulty";
 import { useNavigate } from "react-router";
 import RunningMeter from "../TypeWriter/RunningMeter";
 
+
+const useStyles = createStyles((theme) => ({
+    resultWindow: {
+        ///write a media query that makes the result window 's flex direction property to column when the screen size is less than 600px
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: '1rem',
+
+        '@media (max-width: 1000px)': {
+            flexDirection: 'column',
+        },
+
+    }
+}));
 
 
 
@@ -23,6 +39,7 @@ const modes = {
 const Practice = () => {
 
     const username = sessionStorage.getItem('username');
+    const { classes } = useStyles();
 
 
     const [startTime, setStartTime] = useState(30);
@@ -263,7 +280,7 @@ const Practice = () => {
                 {status === "stop" &&
                     (
                         <>
-                            <Flex justify={'space-between'} w={'80%'}>
+                            <Flex justify={'space-between'} w={'80%'} className={classes.resultWindow}>
                                 <CountUp start={0} end={grossWPM} delay={0}>
                                     {({ countUpRef }) => (
                                         <StatsIcon

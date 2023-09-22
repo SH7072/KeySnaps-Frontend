@@ -1,4 +1,4 @@
-import { RingProgress, Text, Paper, Center, createStyles } from '@mantine/core';
+import { RingProgress, Text, Paper, Center, createStyles, MediaQuery } from '@mantine/core';
 import { IconArrowUpRight, IconArrowDownRight } from '@tabler/icons-react';
 
 const icons = {
@@ -30,7 +30,12 @@ const useStyles = createStyles((theme) => ({
             boxShadow: theme.shadows.md,
             transform: 'scale(1.05)',
         }
-    }
+    },
+    label: {
+        // fontWeight: 700,
+        // lineHeight: 1,
+        fontSize: '0.8rem',
+    },
 }));
 
 
@@ -41,28 +46,26 @@ const StatsIcon = ({ label, stats = 0, progress, icon = "up", countUpRef }) => {
     return (
         <>
             <Paper withBorder radius="md" p="xs" w={"300px"} sx={classes.paper}>
-                {/* <Group> */}
                 <RingProgress
-                    size={80}
+                    size={100}
                     roundCaps
                     thickness={8}
                     sections={[{ value: progress, color: theme.primaryColor }]}
                     label={
-                        <Center>
-                            <Icon size="1.4rem" stroke={1.5} />
-                        </Center>
+                        <div>
+                            <span ref={countUpRef} className={classes.count} />
+                            <span className={classes.label}>
+                                {label === "Accuracy" ? " %" : " WPM"}
+                            </span>
+                        </div>
                     }
                 />
 
-                <div>
-                    <Text size="25px" transform="uppercase" weight={700} ff={"robot mono"}>
+                <Center h='100%' w='100%'>
+                    <Text size="20px" transform="uppercase" weight={700}>
                         {label}
                     </Text>
-                    {/* <Text weight={700} size="xl" ref={countUpRef} /> */}
-                    <span ref={countUpRef} className={classes.count} />
-                    {label === "Accuracy" && <span>%</span>}
-                </div>
-                {/* </Group> */}
+                </Center>
             </Paper>
         </>
     );
