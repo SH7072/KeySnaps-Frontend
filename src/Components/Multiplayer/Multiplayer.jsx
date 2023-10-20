@@ -19,7 +19,7 @@ const useStyles = createStyles((theme) => ({
     },
     container1: {
         // backgroundColor: "white",
-        width: "40%",
+        width: "60%",
         marginRight: "1rem",
         margin: "1rem",
         marginLeft: "0rem",
@@ -28,11 +28,12 @@ const useStyles = createStyles((theme) => ({
     },
     container2: {
         // backgroundColor: "white",
-        width: "60%",
+        width: "40%",
         margin: "1rem",
         marginRight: "0rem",
         flexDirection: "row",
         height: "80vh",
+        // border: '0.5px solid #e9ecef',
 
 
     },
@@ -41,7 +42,7 @@ const useStyles = createStyles((theme) => ({
         height: "12rem",
         flexDirection: "row",
         justifyContent: "center",
-        textAlign: "center"
+        textAlign: "center",
 
     },
     createLobby: {
@@ -49,7 +50,7 @@ const useStyles = createStyles((theme) => ({
         height: "3rem",
         flexDirection: "column  ",
         justifyContent: "center",
-        alignItems: "center  ",
+        alignItems: "center",
 
     },
     joinLobby: {
@@ -57,8 +58,7 @@ const useStyles = createStyles((theme) => ({
         height: "3rem",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center  ",
-
+        alignItems: "center",
     }
 }));
 
@@ -92,7 +92,7 @@ const Multiplayer = () => {
                     </Flex>
                 </Flex>
 
-                <Flex w={0} sx={{ border: '2px solid #e9ecef' }}></Flex>
+                {/* <Flex w={0} sx={{ border: '2px solid #e9ecef' }}></Flex> */}
 
                 <Flex className={classes.container2} justify={'space-around'} direction={'column'} align={'center'}>
                     <Flex align={'center'}>

@@ -161,7 +161,7 @@ const Lobby = () => {
         }
         socket.connect();
         socket.emit('player-joined', { lobbyCode, userid: multiPlayerUserid, username: multiPlayerUsername });
-    });
+    }, [socket]);
 
     useEffect(() => {
         const timerId = time > 0 && status === 'start' && setInterval(() => {

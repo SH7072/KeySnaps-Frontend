@@ -15,6 +15,9 @@ const useStyles = createStyles((theme) => ({
         justifyContent: "center",
         alignContent: "center",
     },
+    signUpBody: {
+        boxShadow: theme.colorScheme === 'light' ? "rgba(0, 0, 0, 0.24) 0px 3px 8px" : theme.shadows.xl,
+    },
     link: {
         textDecoration: 'none',
         color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
@@ -170,7 +173,7 @@ const Signup = () => {
                 <Title order={3} sx={classes.logo} onClick={() => navigate('/home')}>KeySnaps</Title>
 
                 <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'}  >
-                    < Paper p={10} miw={'60%'} maw={'60%'} w={'60%'} shadow="xl" justify="center">
+                    < Paper p={10} miw={'60%'} maw={'60%'} w={'60%'} justify="center" sx={classes.signUpBody}>
                         <Title order={1} align={'center'}>Create an account</Title>
                         <Text c="dimmed" align={'center'}>Enter your details below.</Text>
                         <Flex justify={'center'} align={'center'}>

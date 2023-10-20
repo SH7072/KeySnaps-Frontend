@@ -4,8 +4,8 @@ import User from './ProfileComponents/User';
 import History from './ProfileComponents/History';
 import Stat from './ProfileComponents/Stat';
 import New from './ProfileComponents/New';
-import { H1 } from 'tabler-icons-react';
 import NavBar from '../NavBar/NavBar';
+import { MdOutlineReportGmailerrorred } from 'react-icons/md';
 
 
 
@@ -19,12 +19,23 @@ const useStyles = createStyles((theme) => ({
         margin: "0 auto",
         padding: '2rem 1rem 1rem 1rem',
     },
+    error_container: {
+        display: "flex",
+        flexDirection: "column",
+        // alignSelf: "center",
+        alignItems: "center",
+        justifyContent: "center",
+        // backgroundColor: 'white',
+        width: '65vw',
+        margin: "0 auto",
+        padding: '2rem 1rem 1rem 1rem',
+    },
 }));
 
 const Profile = () => {
 
     const { classes } = useStyles();
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+    let isLoggedIn = sessionStorage.getItem('isLoggedIn');
     if (isLoggedIn == null) {
         sessionStorage.setItem('isLoggedIn', false);
         isLoggedIn = "false";
@@ -52,7 +63,7 @@ const Profile = () => {
             const res = await fetch(url);
             const data = await res.json();
             console.log(data);
-            const status = res.status;
+            // const status = res.status;
             // console.log(data.scores);
             setScore(data.scores);
             setData(data)
@@ -91,13 +102,16 @@ const Profile = () => {
         return (
             <>
                 <NavBar />
-                <div className={classes.main_container}>
-                    {isLoggedIn === "false" && username === null && <h1>Please enter username in userInfo</h1>}
-
+                {isLoggedIn === "false" && username === null && <div className={classes.error_container}>
+                    <MdOutlineReportGmailerrorred size={200} />
+                    <h1>Please enter username in userInfo</h1>
+                </div>}
+                {username != null && <div className={classes.main_container}>
+                    {stats.length === 0 && <h1>Play a game to see your stats!</h1>}
                     {stats.length > 0 && <New stats={stats} username={username} />}
                     {stats.length > 0 && <Stat stats={stats} />}
+                </div>}
 
-                </div>
 
             </>
         )

@@ -13,6 +13,9 @@ const useStyles = createStyles((theme) => ({
         justifyContent: "center",
         alignContent: "center",
     },
+    loginBody: {
+        boxShadow: theme.colorScheme === 'light' ? "rgba(0, 0, 0, 0.24) 0px 3px 8px" : theme.shadows.xl,
+    },
     link: {
         textDecoration: 'none',
         color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
@@ -114,8 +117,8 @@ const Login = () => {
                 {/* <Title order={1} align={'center'} sx={classes.logo}>Login</Title> */}
                 <Title order={3} sx={classes.logo} onClick={() => navigate('/home')}>KeySnaps</Title>
 
-                <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'} >
-                    <Paper w={'60%'} p={10} shadow="xl">
+                <Flex w={'50%'} h={'100%'} justify={'center'} align={'center'}  >
+                    <Paper w={'60%'} p={10} sx={classes.loginBody} >
                         <Title order={1} align={'center'} sx={{ fontFamily: 'Ubuntu Mono' }}>Log In</Title>
                         <Flex justify={'center'} align={'center'} mt={15}>
                             <ActionIcon variant="outline" radius="xl" size="xl" style={{ margin: 'auto' }}>
